@@ -1,0 +1,32 @@
+slide 1
+comment {
+Title Slide, nothing to say here
+Line 2
+Line 3
+Line 4
+Line 5
+Line 6
+Line 7
+Line 8
+Line 9
+Line 10
+}
+
+slide 2
+comment {
+}
+
+slide 3
+comment {
+äöüÄÖÜØø©¢€
+}
+
+keys {
+some_program parameter1 parameter2
+other_program parameter1 parameter2
+mplayer -fs -xineramascreen 1 xyz.ogv
+}
+
+bookmarks {
+3 1 2 3
+}

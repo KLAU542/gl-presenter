@@ -1,0 +1,10 @@
+0.3.3
+Fixed fullscreen in i3 window manager
+Removed problematic mouse position changes
+OpenGL version checking and error handling
+
+0.3.2
+swap screens (Shift+X)
+keyboard input changes (see README)
+usable with "Logitech Presenter" and hopefully similar devices
+fixed execution of external programs
