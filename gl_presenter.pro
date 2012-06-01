@@ -35,6 +35,6 @@ QT += opengl
 OTHER_FILES += DejaVuSans.ttf
 
 #CONFIG += debug
-exists( main.cpp ) {
+exists( gl_presenter_paths.pri ) {
     include (gl_presenter_paths.pri)
 }
