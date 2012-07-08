@@ -15,6 +15,7 @@
 //  along with GL-Presenter.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "PDFThread.h"
+#include <GL/glu.h>
 
 // TODO: configurable cache size
 #define CACHE_SIZE 50 // absolute minimum: 8
@@ -130,8 +131,7 @@ void PDFThread::bindPageTexture(int i) {
     if (animator->getMode() == GLP_ZOOM_MODE && isZoomCached(i)) {
 	    glBindTexture(GL_TEXTURE_2D,zoomtex);
 	    if (updatedzoomcache) {
-                    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-		    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, zoomimage.width(),zoomimage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, zoomimage.bits());
+		    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, zoomimage.width(),zoomimage.height(), GL_RGBA, GL_UNSIGNED_BYTE, zoomimage.bits());
 		    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
@@ -145,8 +145,7 @@ void PDFThread::bindPageTexture(int i) {
         int cnum = pagecache[i];
         glBindTexture(GL_TEXTURE_2D,pagetex[cnum]);
         if (updatedpage[i]) {
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pageimage[cnum].width(),pageimage[cnum].height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pageimage[cnum].bits());
+            gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, pageimage[cnum].width(),pageimage[cnum].height(), GL_RGBA, GL_UNSIGNED_BYTE, pageimage[cnum].bits());
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
@@ -164,8 +163,7 @@ void PDFThread::bindThumbTexture(int i) {
     if (i<0 || i>=pagecount || i>=thumbnailed) return;
     if (updatedthumb[i]) {
         glBindTexture(GL_TEXTURE_2D, thumbtex[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, thumbimage[i].width(),thumbimage[i].height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, thumbimage[i].bits());
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, thumbimage[i].width(),thumbimage[i].height(), GL_RGBA, GL_UNSIGNED_BYTE, thumbimage[i].bits());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 

@@ -17,7 +17,12 @@
 # QMAKE_CFLAGS_DEBUG += -pg
 # QMAKE_CXXFLAGS_DEBUG += -pg
 # QMAKE_LFLAGS_DEBUG += -pg
-LIBS += -lpoppler-qt4 -lGLU
+win32 {
+    LIBS += C:\\ProgramData\\KDE\\lib\\libpoppler-qt4.dll.a
+}
+unix {
+    LIBS += -lpoppler-qt4 -lGLU
+}
 HEADERS += Animator.h \
     GeneralWidget.h \
     PresenterWidget.h \
