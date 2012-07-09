@@ -24,6 +24,7 @@ class PresenterWidget : public GeneralWidget
 public:
 	PresenterWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent=0, const QGLWidget *shareWidget=0, Qt::WFlags flags=0);
 	~PresenterWidget();
+	void initScreens();
 	void swapScreens();
 public slots:
 	void updateTimes();

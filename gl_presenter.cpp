@@ -94,6 +94,7 @@ int main(int argc, char* argv[])
 	pw->move(deskRect.x(),deskRect.y());
 	pw->resize(deskRect.width(),deskRect.height());
 	pw->showFullScreen();
+	pw->initScreens();
 
 	a.setActiveWindow( pw );
         int rt = a.exec();

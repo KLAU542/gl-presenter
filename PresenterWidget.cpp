@@ -611,6 +611,13 @@ void PresenterWidget::wheelEvent(QWheelEvent *event) {
 	}
 }
 
+void PresenterWidget::initScreens() {
+	if (overviewfbo != NULL)
+		delete overviewfbo;
+	overviewfbo = new QGLFramebufferObject(width(),height(),QGLFramebufferObject::NoAttachment,GL_TEXTURE_2D,GL_RGB);
+	overviewfboinitialized = false;
+}
+
 void PresenterWidget::swapScreens() {
 	printf("swap screens ...\n");
 	if (QApplication::desktop()->numScreens() >= 2) {
