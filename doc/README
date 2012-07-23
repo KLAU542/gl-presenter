@@ -58,6 +58,9 @@ libqt4-dev libqt4-opengl-dev libglu-dev libpoppler-qt4-dev
 Windows build dependencies:
 Install Poppler (bin + dev) using the KDE for Windows installer.
 
+i3 config (tiling window manager):
+for_window [class="Gl_presenter"] floating enable
+
 Notes:
 Look at sample file in doc/notes_sample.pdf.glp
 Filename must contain the complete PDF filename.
