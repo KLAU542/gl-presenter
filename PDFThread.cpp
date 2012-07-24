@@ -20,6 +20,10 @@
 #define CACHE_SIZE 50 // absolute minimum: 8
 #define MAX_ZOOM 4 // zoom cache takes MAX_ZOOM^2 normal page memory
 
+#ifndef GL_GENERATE_MIPMAP
+#define GL_GENERATE_MIPMAP 0x8191
+#endif
+
 PDFThread::PDFThread() {
         thumbnailed = 0;
 }
