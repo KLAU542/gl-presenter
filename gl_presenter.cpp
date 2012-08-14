@@ -19,6 +19,28 @@
 
 using namespace std;
 
+QString getCliParameter(QString input, QString patternshort, QString patternlong, int &position) {
+	if (input.startsWith(patternshort)) {
+		if (input.length()==patternshort.length()) {
+			position++;
+			if (position >= qApp->argc()-1)
+				return QString();
+			return qApp->argv()[position];
+		} else {
+			return input.right(input.length()-patternshort.length());
+		}
+	} else if (input.startsWith(patternlong)) {
+		if (input.length()==patternlong.length()) {
+			position++;
+			if (position >= qApp->argc()-1)
+				return QString();
+			return qApp->argv()[position];
+		} else {
+			return input.right(input.length()-patternlong.length()-1);
+		}
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	QApplication a( argc, argv );
@@ -74,15 +96,31 @@ int main(int argc, char* argv[])
 	PDFThread *pdfthread;
 	Animator *animator;
 
-	if (argc<=1) {
-		printf("Usage: gl-presenter presentation.pdf\n");
+	if (qApp->argc()<=1) {
+		printf("Usage: gl-presenter [OPTION] presentation.pdf\n");
+		printf("Options:\n");
+		printf("  -a TIME, \t--animation-duration=TIME \tSet animation duration to TIME milliseconds.\n");
+		printf("  -l LINES, \t--comment-lines=LINES \tSet number of LINES for comments.\n");
 		return 1;
+	}
+
+	for ( int i = 0; i < qApp->argc()-1; i++ ) {
+		QString s = qApp->argv()[i];
+		if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
+			QString s2 = getCliParameter(s,"-a","--animation-duration",i);
+			printf("Set animation duration to %u milliseconds.\n",s2.toUInt());
+			// TODO: set animation duration
+		} else if (s.startsWith("-l") || s.startsWith("--comment-lines")) {
+			QString s2 = getCliParameter(s,"-l","--comment-lines",i);
+			printf("Set comment lines to %u.\n",s2.toUInt());
+			// TODO: set comment line count
+		}
 	}
 
         animator = new Animator();
         pdfthread = new PDFThread();
         pdfthread->setAnimator(animator);
-	if (!pdfthread->loadFile(QString::fromLocal8Bit(argv[1]))) {
+	if (!pdfthread->loadFile(qApp->argv()[qApp->argc()-1])) {
 		delete pdfthread;
 		return 1;
 	}
