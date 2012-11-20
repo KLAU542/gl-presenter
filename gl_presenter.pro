@@ -39,6 +39,11 @@ SOURCES += gl_presenter.cpp \
 QT += opengl
 OTHER_FILES += DejaVuSans.ttf
 
+binary.files = gl_presenter
+binary.path = $$[QT_INSTALL_BINS]
+
+INSTALLS += binary
+
 #CONFIG += debug
 exists( gl_presenter_paths.pri ) {
     include (gl_presenter_paths.pri)
