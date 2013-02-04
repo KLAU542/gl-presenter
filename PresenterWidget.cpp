@@ -32,7 +32,7 @@ qfontmetrics3(qfont3)
 //	move(deskRect[0].x(),deskRect[0].y());
 	resize(deskRect[0].width(),deskRect[0].height());
 
-	qfont.setPixelSize(deskRect[0].height()/12.0);
+	qfont.setPixelSize(deskRect[0].height()/15.0);
 	qfont2.setPixelSize(deskRect[0].height()/40.0);
 	qfont3.setPixelSize(deskRect[0].height()/20.0);
 
@@ -323,9 +323,9 @@ void PresenterWidget::paintPresenterMode() {
 //	font->FaceSize(height()/12.0);
 
         this->renderText(2.0/3.0 - float(qfontmetrics.width(positionstr))/float(width()), -1.0/3.0 - 2.0/11.0, 0.0, positionstr, qfont);
-        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8("+00:00:00")))/float(width()), -1.0/3.0 - 2.0/11.0 - 3.0/12, 0.0, timerstr, qfont);
+        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8("++00:00:00")))/float(width()), -1.0/3.0 - 2.0/11.0 - 3.0/12, 0.0, timerstr, qfont);
 	glColor3f(0.5,0.5,0.5);
-        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8("⌚00:00:00")))/float(width()), -1.0/3.0 - 2.0/11.0 - 5.0/12, 0.0, clockstr, qfont);
+        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8("⌚⌚00:00:00")))/float(width()), -1.0/3.0 - 2.0/11.0 - 5.0/12, 0.0, clockstr, qfont);
 
 	glColor3f(1.0,1.0,1.0);
 	glBegin(GL_LINES);
@@ -645,7 +645,7 @@ void PresenterWidget::swapScreens() {
 
 		QCursor::setPos(deskRect[0].x() + deskRect[0].width()*0.5, deskRect[0].y() + deskRect[0].height()*0.5);
 	
-		qfont.setPixelSize(deskRect[0].height()/12.0);
+		qfont.setPixelSize(deskRect[0].height()/15.0);
 		qfont2.setPixelSize(deskRect[0].height()/40.0);
 		qfont3.setPixelSize(deskRect[0].height()/20.0);
         	
