@@ -32,7 +32,7 @@ qfontmetrics3(qfont3)
 //	move(deskRect[0].x(),deskRect[0].y());
 	resize(deskRect[0].width(),deskRect[0].height());
 
-	qfont.setPixelSize(deskRect[0].height()/15.0);
+	qfont.setPixelSize(deskRect[0].height()/13.5);
 	qfont2.setPixelSize(deskRect[0].height()/40.0);
 	qfont3.setPixelSize(deskRect[0].height()/20.0);
 
@@ -645,7 +645,7 @@ void PresenterWidget::swapScreens() {
 
 		QCursor::setPos(deskRect[0].x() + deskRect[0].width()*0.5, deskRect[0].y() + deskRect[0].height()*0.5);
 	
-		qfont.setPixelSize(deskRect[0].height()/15.0);
+		qfont.setPixelSize(deskRect[0].height()/13.5);
 		qfont2.setPixelSize(deskRect[0].height()/40.0);
 		qfont3.setPixelSize(deskRect[0].height()/20.0);
         	
