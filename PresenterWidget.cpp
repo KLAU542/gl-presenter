@@ -120,8 +120,8 @@ void PresenterWidget::startTimer() {
 }
 
 void PresenterWidget::updateTimes() {
-	clockstr = QTime::currentTime().toString();
-	timerstr = QTime((animator->time.elapsed()/3600000)%24,(animator->time.elapsed()/60000)%60,(animator->time.elapsed()/1000)%60,animator->time.elapsed()%1000).toString();
+	timerstr = QString::fromUtf8("+").append(QTime((animator->time.elapsed()/3600000)%24,(animator->time.elapsed()/60000)%60,(animator->time.elapsed()/1000)%60,animator->time.elapsed()%1000).toString());
+	clockstr = QString::fromUtf8("⌚").append(QTime::currentTime().toString());
 	if (animator->getMode() == GLP_PRESENTER_MODE) {
 		update();
 	}
@@ -323,9 +323,11 @@ void PresenterWidget::paintPresenterMode() {
 //	font->FaceSize(height()/12.0);
 
         this->renderText(2.0/3.0 - float(qfontmetrics.width(positionstr))/float(width()), -1.0/3.0 - 2.0/11.0, 0.0, positionstr, qfont);
-        this->renderText(2.0/3.0 - float(qfontmetrics.width("00:00:00"))/float(width()), -1.0/3.0 - 2.0/11.0 - 3.0/12, 0.0, clockstr, qfont);
-        this->renderText(2.0/3.0 - float(qfontmetrics.width("00:00:00"))/float(width()), -1.0/3.0 - 2.0/11.0 - 5.0/12, 0.0, timerstr, qfont);
+        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8("+00:00:00")))/float(width()), -1.0/3.0 - 2.0/11.0 - 3.0/12, 0.0, timerstr, qfont);
+	glColor3f(0.5,0.5,0.5);
+        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8("⌚00:00:00")))/float(width()), -1.0/3.0 - 2.0/11.0 - 5.0/12, 0.0, clockstr, qfont);
 
+	glColor3f(1.0,1.0,1.0);
 	glBegin(GL_LINES);
 		glVertex2f(0.3333,-1.0);
 		glVertex2f(0.3333, 1.0);
