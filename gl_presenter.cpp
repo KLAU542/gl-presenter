@@ -41,6 +41,14 @@ QString getCliParameter(QString input, QString patternshort, QString patternlong
 	}
 }
 
+void display_usage() {
+	printf("Usage: gl-presenter [OPTION] presentation.pdf\n");
+	printf("Options:\n");
+	printf("  -a TIME,  --animation-duration=TIME Set animation duration to TIME milliseconds.\n");
+	printf("  -h,       --help                    Display this help and exit.\n");
+	printf("  -l LINES, --comment-lines=LINES     Set number of LINES for comments.\n");
+}
+
 int main(int argc, char* argv[])
 {
 	QApplication a( argc, argv );
@@ -97,16 +105,18 @@ int main(int argc, char* argv[])
 	Animator *animator;
 
 	if (qApp->argc()<=1) {
-		printf("Usage: gl-presenter [OPTION] presentation.pdf\n");
-		printf("Options:\n");
-		printf("  -a TIME, \t--animation-duration=TIME \tSet animation duration to TIME milliseconds.\n");
-		printf("  -l LINES, \t--comment-lines=LINES \tSet number of LINES for comments.\n");
+		display_usage();
 		return 1;
 	}
 
-	for ( int i = 0; i < qApp->argc()-1; i++ ) {
+	for ( int i = 0; i < qApp->argc(); i++ ) {
 		QString s = qApp->argv()[i];
-		if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
+		if (s.startsWith("-h") || s.startsWith("--help")) {
+			display_usage();
+			return 1;
+		} else if (i == qApp->argc()-1) {
+			break;
+		} else if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
 			QString s2 = getCliParameter(s,"-a","--animation-duration",i);
 			printf("Set animation duration to %u milliseconds.\n",s2.toUInt());
 			// TODO: set animation duration
