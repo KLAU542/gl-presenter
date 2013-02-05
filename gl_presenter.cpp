@@ -45,8 +45,35 @@ void display_usage() {
 	printf("Usage: gl-presenter [OPTION] presentation.pdf\n");
 	printf("Options:\n");
 	printf("  -a TIME,  --animation-duration=TIME Set animation duration to TIME milliseconds.\n");
+	printf("  -e,       --edit                    Show editor.\n");
 	printf("  -h,       --help                    Display this help and exit.\n");
 	printf("  -l LINES, --comment-lines=LINES     Set number of LINES for comments.\n");
+	printf("  -s,       --settings                Show settings.\n");
+	printf("\n\
+Keys:\n\
+Use the usual keys and mouse buttons for switching slides.\n\
+Tab	switch to slide selection\n\
+Z	switch to zoom mode\n\
+F	zoom to full page\n\
+H	fit page horizontally\n\
+V	fit page vertically\n\
+T	switch to 2-page mode\n\
+B	blank out\n\
+R	reset timer\n\
+?	mouse area help\n\
+M	re-enable mouse after command execution\n\
+Shift+X	swap screens\n\
+Shift+Esc,Shift+Q\n\
+	quit/close\n\
+F1-F4	execute predefined command\n\
+1-0	call bookmark\n\
+Ctrl+1	save bookmark\n\
+\n\
+In slide selection:\n\
+arrow keys, mouse	move slide cursor\n\
+Esc, Tab, RMB		back to presenter mode\n\
+Enter, Return, LMB	select slide\n\
+");
 }
 
 int main(int argc, char* argv[])
@@ -114,6 +141,10 @@ int main(int argc, char* argv[])
 		if (s.startsWith("-h") || s.startsWith("--help")) {
 			display_usage();
 			return 1;
+		}
+		else if (s.startsWith("-e") || s.startsWith("--edit")) {
+			// TODO: start editor
+			return 0;
 		} else if (i == qApp->argc()-1) {
 			break;
 		} else if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
