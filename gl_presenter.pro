@@ -36,6 +36,7 @@ SOURCES += gl_presenter.cpp \
     BeamerWidget.cpp \
     CommentLoader.cpp \
     PDFThread.cpp
+RESOURCES += gl_presenter.qrc
 QT += opengl
 OTHER_FILES += DejaVuSans.ttf
 

@@ -39,41 +39,20 @@ QString getCliParameter(QString input, QString patternshort, QString patternlong
 			return input.right(input.length()-patternlong.length()-1);
 		}
 	}
+	return QString();
 }
 
 void display_usage() {
-	printf("Usage: gl-presenter [OPTION] presentation.pdf\n");
-	printf("Options:\n");
-	printf("  -a TIME,  --animation-duration=TIME Set animation duration to TIME milliseconds.\n");
-	printf("  -e,       --edit                    Show editor.\n");
-	printf("  -h,       --help                    Display this help and exit.\n");
-	printf("  -l LINES, --comment-lines=LINES     Set number of LINES for comments.\n");
-	printf("  -s,       --settings                Show settings.\n");
-	printf("\n\
-Keys:\n\
-Use the usual keys and mouse buttons for switching slides.\n\
-Tab	switch to slide selection\n\
-Z	switch to zoom mode\n\
-F	zoom to full page\n\
-H	fit page horizontally\n\
-V	fit page vertically\n\
-T	switch to 2-page mode\n\
-B	blank out\n\
-R	reset timer\n\
-?	mouse area help\n\
-M	re-enable mouse after command execution\n\
-Shift+X	swap screens\n\
-Shift+Esc,Shift+Q\n\
-	quit/close\n\
-F1-F4	execute predefined command\n\
-1-0	call bookmark\n\
-Ctrl+1	save bookmark\n\
-\n\
-In slide selection:\n\
-arrow keys, mouse	move slide cursor\n\
-Esc, Tab, RMB		back to presenter mode\n\
-Enter, Return, LMB	select slide\n\
-");
+	QFile readme(":/doc/README");
+	if (!readme.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
+	QTextStream in(&readme);
+	QTextStream out(stdout);
+	out << endl;
+	while (!in.atEnd()) {
+		QString line = in.readLine();
+		out << line << endl;
+	}
 }
 
 int main(int argc, char* argv[])

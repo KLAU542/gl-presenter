@@ -6,6 +6,15 @@ It automatically uses display 0 as presenter screen and display 1 as beamer scre
 If only one display is available, the presenter screen is shown.
 
 
+Usage: gl-presenter [OPTION] presentation.pdf
+Options:
+  -a TIME,  --animation-duration=TIME Set animation duration to TIME milliseconds.
+  -e,       --edit                    Show editor.
+  -h,       --help                    Display this help and exit.
+  -l LINES, --comment-lines=LINES     Set number of LINES for comments.
+  -s,       --settings                Show settings.
+
+
 Features:
 multi-display-support
 preview of next two slides
