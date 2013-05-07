@@ -250,6 +250,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			}
 			else {
 				int bmkey = event->key() - Qt::Key_1;
+				if (event->key() == Qt::Key_0) bmkey=9;
 				int bmvalue = pdfthread->getComments()->getBookmark(bmkey);
 				animator->setCurrentPage(bmvalue);
 				if (bmvalue >= 0) {
