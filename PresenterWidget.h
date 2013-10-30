@@ -22,7 +22,7 @@ class PresenterWidget : public GeneralWidget
 	Q_OBJECT
 
 public:
-	PresenterWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent=0, const QGLWidget *shareWidget=0, Qt::WFlags flags=0);
+	PresenterWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent=0, const QGLWidget *shareWidget=0, Qt::WindowFlags flags=0);
 	~PresenterWidget();
 	void initScreens();
 	void swapScreens();

@@ -23,18 +23,18 @@ QString getCliParameter(QString input, QString patternshort, QString patternlong
 	if (input.startsWith(patternshort)) {
 		if (input.length()==patternshort.length()) {
 			position++;
-			if (position >= qApp->argc()-1)
+			if (position >= qApp->arguments().size()-1)
 				return QString();
-			return qApp->argv()[position];
+			return qApp->arguments()[position];
 		} else {
 			return input.right(input.length()-patternshort.length());
 		}
 	} else if (input.startsWith(patternlong)) {
 		if (input.length()==patternlong.length()) {
 			position++;
-			if (position >= qApp->argc()-1)
+			if (position >= qApp->arguments().size()-1)
 				return QString();
-			return qApp->argv()[position];
+			return qApp->arguments()[position];
 		} else {
 			return input.right(input.length()-patternlong.length()-1);
 		}
@@ -110,27 +110,36 @@ int main(int argc, char* argv[])
 	PDFThread *pdfthread;
 	Animator *animator;
 
-	if (qApp->argc()<=1) {
+	if (qApp->arguments().size()<=1) {
 		display_usage();
 		return 1;
 	}
 
-	for ( int i = 0; i < qApp->argc(); i++ ) {
-		QString s = qApp->argv()[i];
+	for ( int i = 0; i < qApp->arguments().size(); i++ ) {
+		QString s = qApp->arguments()[i];
 		if (s.startsWith("-h") || s.startsWith("--help")) {
 			display_usage();
-			return 1;
+			return 0;
+		}
+		else if (s.startsWith("-c") || s.startsWith("--config")) {
+			printf("Showing configuration dialog.\n");
+			// TODO: start configuration
+			return 0;
 		}
 		else if (s.startsWith("-e") || s.startsWith("--edit")) {
+			printf("Showing editor.\n");
 			// TODO: start editor
 			return 0;
-		} else if (i == qApp->argc()-1) {
+		}
+		else if (i == qApp->arguments().size()-1) {
 			break;
-		} else if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
+		}
+		else if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
 			QString s2 = getCliParameter(s,"-a","--animation-duration",i);
 			printf("Set animation duration to %u milliseconds.\n",s2.toUInt());
 			// TODO: set animation duration
-		} else if (s.startsWith("-l") || s.startsWith("--comment-lines")) {
+		}
+		else if (s.startsWith("-l") || s.startsWith("--comment-lines")) {
 			QString s2 = getCliParameter(s,"-l","--comment-lines",i);
 			printf("Set comment lines to %u.\n",s2.toUInt());
 			// TODO: set comment line count
@@ -140,7 +149,7 @@ int main(int argc, char* argv[])
         animator = new Animator();
         pdfthread = new PDFThread();
         pdfthread->setAnimator(animator);
-	if (!pdfthread->loadFile(qApp->argv()[qApp->argc()-1])) {
+	if (!pdfthread->loadFile(qApp->arguments()[qApp->arguments().size()-1])) {
 		delete pdfthread;
 		return 1;
 	}

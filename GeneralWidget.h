@@ -23,7 +23,7 @@
 class GeneralWidget : public QGLWidget
 {
 public:
-	GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent=0, const QGLWidget *shareWidget=0, Qt::WFlags flags=0);
+	GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent=0, const QGLWidget *shareWidget=0, Qt::WindowFlags flags=0);
 	virtual ~GeneralWidget();
 	virtual void swapScreens();
 	void calculateAspects();

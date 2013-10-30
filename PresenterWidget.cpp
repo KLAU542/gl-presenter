@@ -19,7 +19,7 @@
 
 #define MOUSE_HIDE_TIMEOUT 2000
 
-PresenterWidget::PresenterWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WFlags flags) : GeneralWidget(format,pdfthread,animator,parent,shareWidget,flags),
+PresenterWidget::PresenterWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags) : GeneralWidget(format,pdfthread,animator,parent,shareWidget,flags),
 qfont("dejavu"),
 qfont2("dejavu"),
 qfont3("dejavu"),

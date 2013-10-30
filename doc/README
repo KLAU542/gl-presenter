@@ -9,10 +9,10 @@ If only one display is available, the presenter screen is shown.
 Usage: gl-presenter [OPTION] presentation.pdf
 Options:
   -a TIME,  --animation-duration=TIME Set animation duration to TIME milliseconds.
+  -c,       --config                  Show configuration dialog.
   -e,       --edit                    Show editor.
   -h,       --help                    Display this help and exit.
   -l LINES, --comment-lines=LINES     Set number of LINES for comments.
-  -s,       --settings                Show settings.
 
 
 Features:

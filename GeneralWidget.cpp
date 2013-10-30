@@ -19,7 +19,7 @@
 #include "GeneralWidget.h"
 #include <iostream>
 
-GeneralWidget::GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WFlags flags) : QGLWidget(format,parent,shareWidget,flags)
+GeneralWidget::GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags) : QGLWidget(format,parent,shareWidget,flags)
 {
 	this->pdfthread = pdfthread;
 	this->animator = animator;

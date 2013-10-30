@@ -16,7 +16,7 @@
 
 #include "BeamerWidget.h"
 
-BeamerWidget::BeamerWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WFlags flags) : GeneralWidget(format, pdfthread,animator,parent,shareWidget,flags)
+BeamerWidget::BeamerWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags) : GeneralWidget(format, pdfthread,animator,parent,shareWidget,flags)
 {
 	setWindowTitle(tr("Beamer"));
 	setMouseTracking(true);
