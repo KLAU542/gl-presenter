@@ -28,7 +28,9 @@ qfontmetrics3(qfont3)
 {
 	setWindowTitle(tr("Presenter"));
 	setMouseTracking(true);
-	deskRect[0] = QApplication::desktop()->screenGeometry( 0 );
+	screen0 = qsettings.value("screens/screen0", 0).toInt();
+	screen1 = qsettings.value("screens/screen1", 1).toInt();
+	deskRect[0] = QApplication::desktop()->screenGeometry( screen0 );
 
 	qfont.setPixelSize(deskRect[0].height()/13.5);
 	qfont2.setPixelSize(deskRect[0].height()/40.0);
@@ -53,7 +55,7 @@ qfontmetrics3(qfont3)
 			exit(2);
 			return;
 		}
-		deskRect[1] = QApplication::desktop()->screenGeometry( 1 );
+		deskRect[1] = QApplication::desktop()->screenGeometry( screen1 );
 		beamerwidget->showNormal();
 		beamerwidget->move(deskRect[1].x()+100,deskRect[1].y()+100);
 		beamerwidget->resize(deskRect[1].width(),deskRect[1].height());

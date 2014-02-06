@@ -36,5 +36,7 @@ protected:
 	Animator *animator;
 	double aspectx,aspecty;
 	QRect deskRect[2];
+	QSettings qsettings;
+	int screen0,screen1;
 };
 

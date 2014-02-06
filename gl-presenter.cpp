@@ -163,7 +163,8 @@ int main(int argc, char* argv[])
 	pw = new PresenterWidget(glFormat,pdfthread, animator);
 
 	pw->showNormal();
-	QRect deskRect = QApplication::desktop()->screenGeometry( 0 );
+	int screen0 = qsettings.value("screens/screen0", 0).toInt();
+	QRect deskRect = QApplication::desktop()->screenGeometry( screen0 );
 	pw->move(deskRect.x()+100,deskRect.y()+100);
 	pw->resize(deskRect.width(),deskRect.height());
 	pw->showFullScreen();

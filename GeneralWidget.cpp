@@ -24,9 +24,11 @@ GeneralWidget::GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Anim
 	this->pdfthread = pdfthread;
 	this->animator = animator;
 //	setCursor(Qt::BlankCursor);
-	deskRect[0] = QApplication::desktop()->screenGeometry( 0 );
+	screen0 = qsettings.value("screens/screen0", 0).toInt();
+	screen1 = qsettings.value("screens/screen1", 1).toInt();
+	deskRect[0] = QApplication::desktop()->screenGeometry( screen0 );
 	if (QApplication::desktop()->numScreens() >= 2) {
-		deskRect[1] = QApplication::desktop()->screenGeometry( 1 );
+		deskRect[1] = QApplication::desktop()->screenGeometry( screen1 );
 	}
 }
 
@@ -379,5 +381,11 @@ void GeneralWidget::swapScreens() {
 		QRect temp = deskRect[0];
 		deskRect[0] = deskRect[1];
 		deskRect[1] = temp;
+		int tmpint;
+		tmpint = screen1;
+		screen1 = screen0;
+		screen0 = tmpint;
+		qsettings.setValue("screens/screen0", screen0);
+		qsettings.setValue("screens/screen1", screen1);
 	}
 }
