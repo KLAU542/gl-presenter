@@ -57,8 +57,14 @@ void display_usage() {
 
 int main(int argc, char* argv[])
 {
+	QCoreApplication::setOrganizationName("gl-presenter");
+	QCoreApplication::setOrganizationDomain("unix-ag.uni-kl.de");
+	QCoreApplication::setApplicationName("gl-presenter");
+
+	QSettings qsettings;
+
 	QApplication a( argc, argv );
-	
+
 	// OpenGL initialization
 	QGLFormat::OpenGLVersionFlags flags = QGLFormat::openGLVersionFlags();
 	if (flags == QGLFormat::OpenGL_Version_None) {
@@ -137,7 +143,7 @@ int main(int argc, char* argv[])
 		else if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
 			QString s2 = getCliParameter(s,"-a","--animation-duration",i);
 			printf("Set animation duration to %u milliseconds.\n",s2.toUInt());
-			// TODO: set animation duration
+			qsettings.setValue("animator/duration", s2.toUInt());
 		}
 		else if (s.startsWith("-l") || s.startsWith("--comment-lines")) {
 			QString s2 = getCliParameter(s,"-l","--comment-lines",i);

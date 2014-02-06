@@ -18,6 +18,7 @@
 #include <QTime>
 #include <QApplication>
 #include <QWidget>
+#include <QSettings>
 
 #define GLP_PRESENTER_MODE 0
 #define GLP_ZOOM_MODE 1
@@ -82,5 +83,6 @@ private:
 	int linecount;
 	double zoomfactor, zoomx, zoomy;
 	bool horizontallock,verticallock;
+	QSettings qsettings;
 };
 

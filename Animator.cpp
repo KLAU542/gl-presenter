@@ -23,7 +23,8 @@ Animator::Animator() {
 	mode = 0;
 	lastpage = 0;
 	secondlastpage = 0;
-	animationduration = 500;
+
+	animationduration = qsettings.value("animator/duration", 500).toInt();
 	animationtime.start();
 	currentselected = 0;
 
