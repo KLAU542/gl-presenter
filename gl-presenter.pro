@@ -17,12 +17,24 @@
 # QMAKE_CFLAGS_DEBUG += -pg
 # QMAKE_CXXFLAGS_DEBUG += -pg
 # QMAKE_LFLAGS_DEBUG += -pg
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+win32 {
+    LIBS += C:\\ProgramData\\KDE\\lib\\libpoppler-qt5.dll.a
+}
+unix {
+    LIBS += -lpoppler-qt5 -lGLU
+}
+}
+else {
 win32 {
     LIBS += C:\\ProgramData\\KDE\\lib\\libpoppler-qt4.dll.a
 }
 unix {
     LIBS += -lpoppler-qt4 -lGLU
 }
+}
+
 HEADERS += Animator.h \
     GeneralWidget.h \
     PresenterWidget.h \

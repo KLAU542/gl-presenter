@@ -56,13 +56,13 @@ make
 
 
 Dependencies:
-qt4
+qt4/qt5
 glu
-poppler-qt4
+poppler-qt4/poppler-qt5
 dejavu (font)
 
 Debian build dependencies:
-libqt4-dev libqt4-opengl-dev libglu-dev libpoppler-qt4-dev
+libqt4-dev/libqt5-dev libqt4-opengl-dev/libqt5opengl5-dev libglu-dev libpoppler-qt4-dev/libpoppler-qt5-dev
 
 Windows build dependencies:
 Install Poppler (bin + dev) using the KDE for Windows installer.
