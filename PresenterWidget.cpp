@@ -56,7 +56,7 @@ qfontmetrics3(qfont3)
 		deskRect[1] = QApplication::desktop()->screenGeometry( 1 );
 		beamerwidget->showNormal();
 		beamerwidget->move(deskRect[1].x()+100,deskRect[1].y()+100);
-		beamerwidget->resize(deskRect[1].width()-200,deskRect[1].height()-200);
+		beamerwidget->resize(deskRect[1].width(),deskRect[1].height());
 	}
 }
 
@@ -631,13 +631,13 @@ void PresenterWidget::swapScreens() {
 
 		beamerwidget->showNormal();
 		beamerwidget->move(deskRect[1].x()+100,deskRect[1].y()+100);
-		beamerwidget->resize(deskRect[1].width()-200,deskRect[1].height()-200);
+		beamerwidget->resize(deskRect[1].width(),deskRect[1].height());
 		beamerwidget->showFullScreen();
 		beamerwidget->calculateAspects();
 
 		showNormal();
 		move(deskRect[0].x()+100,deskRect[0].y()+100);
-		resize(deskRect[0].width()-200,deskRect[0].height()-200);
+		resize(deskRect[0].width(),deskRect[0].height());
 		showFullScreen();
 		calculateAspects();
 

@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
 	pw->showNormal();
 	QRect deskRect = QApplication::desktop()->screenGeometry( 0 );
 	pw->move(deskRect.x()+100,deskRect.y()+100);
-	pw->resize(deskRect.width()-200,deskRect.height()-200);
+	pw->resize(deskRect.width(),deskRect.height());
 	pw->showFullScreen();
 	pw->initScreens();
 
