@@ -47,7 +47,7 @@ void GeneralWidget::checkForGlError(std::string location){
 void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 	bool handled = false;
 	if (animator->getMode() == GLP_SELECTION_MODE) {
-		bool setmouse = false;
+//		bool setmouse = false;
 		switch(event->key()) {
 			case Qt::Key_Right:
 			case Qt::Key_Forward:
@@ -56,7 +56,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 				if (animator->getSelected() < animator->getPageCount()-1) {
 					animator->setSelected(animator->getSelected()+1);
 				}
-				setmouse = true;
+//				setmouse = true;
 				handled = true;
 				break;
 			case Qt::Key_Left:
@@ -67,21 +67,21 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 				if (animator->getSelected() > 0) {
 					animator->setSelected(animator->getSelected()-1);
 				}
-				setmouse = true;
+//				setmouse = true;
 				handled = true;
 				break;
 			case Qt::Key_Down:
 				if (animator->getSelected() < animator->getPageCount()-animator->getRowCount()) {
 					animator->setSelected(animator->getSelected()+animator->getRowCount());
 				}
-				setmouse = true;
+//				setmouse = true;
 				handled = true;
 				break;
 			case Qt::Key_Up:
 				if (animator->getSelected() >= animator->getRowCount()) {
 					animator->setSelected(animator->getSelected()-animator->getRowCount());
 				}
-				setmouse = true;
+//				setmouse = true;
 				handled = true;
 				break;
 			case Qt::Key_Space:
