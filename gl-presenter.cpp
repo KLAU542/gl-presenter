@@ -111,8 +111,8 @@ int main(int argc, char* argv[])
 //		glFormat.setProfile( QGLFormat::CoreProfile ); // Requires >=Qt-4.8.0
 	}
 	// Enable Antialiasing:
-	glFormat.setSampleBuffers( true );
-	glFormat.setSamples( 16 );
+//	glFormat.setSampleBuffers( true );
+//	glFormat.setSamples( 16 );
 	PresenterWidget *pw;
 	PDFThread *pdfthread;
 	Animator *animator;
