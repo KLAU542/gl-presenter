@@ -29,23 +29,23 @@ HEADERS += Animator.h \
     BeamerWidget.h \
     CommentLoader.h \
     PDFThread.h
-SOURCES += gl_presenter.cpp \
+SOURCES += gl-presenter.cpp \
     Animator.cpp \
     GeneralWidget.cpp \
     PresenterWidget.cpp \
     BeamerWidget.cpp \
     CommentLoader.cpp \
     PDFThread.cpp
-RESOURCES += gl_presenter.qrc
+RESOURCES += gl-presenter.qrc
 QT += opengl
 OTHER_FILES += DejaVuSans.ttf
 
-binary.files = gl_presenter
+binary.files = gl-presenter
 binary.path = $$[QT_INSTALL_BINS]
 
 INSTALLS += binary
 
 #CONFIG += debug
-exists( gl_presenter_paths.pri ) {
-    include (gl_presenter_paths.pri)
+exists( gl-presenter_paths.pri ) {
+    include (gl-presenter_paths.pri)
 }
