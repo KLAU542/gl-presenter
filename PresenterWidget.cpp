@@ -29,8 +29,6 @@ qfontmetrics3(qfont3)
 	setWindowTitle(tr("Presenter"));
 	setMouseTracking(true);
 	deskRect[0] = QApplication::desktop()->screenGeometry( 0 );
-//	move(deskRect[0].x(),deskRect[0].y());
-	resize(deskRect[0].width(),deskRect[0].height());
 
 	qfont.setPixelSize(deskRect[0].height()/13.5);
 	qfont2.setPixelSize(deskRect[0].height()/40.0);
@@ -56,10 +54,9 @@ qfontmetrics3(qfont3)
 			return;
 		}
 		deskRect[1] = QApplication::desktop()->screenGeometry( 1 );
-//		beamerwidget->move(deskRect[1].x(),deskRect[1].y());
 		beamerwidget->showNormal();
-		beamerwidget->move(deskRect[1].x(),deskRect[1].y());
-		beamerwidget->resize(deskRect[1].width(),deskRect[1].height());
+		beamerwidget->move(deskRect[1].x()+100,deskRect[1].y()+100);
+		beamerwidget->resize(deskRect[1].width()-200,deskRect[1].height()-200);
 	}
 }
 
@@ -104,6 +101,7 @@ void PresenterWidget::initializeGL() {
 	if (beamerwidget!=NULL) {
 		beamerwidget->showFullScreen();
 	}
+	QCursor::setPos(deskRect[0].x() + deskRect[0].width()*0.5, deskRect[0].y() + deskRect[0].height()*0.5);
 	checkForGlError("End of InitializeGL in PresenterWidget ");
         printf("Initialized OpenGL\n");
 }
@@ -632,14 +630,14 @@ void PresenterWidget::swapScreens() {
 		beamerwidget->swapScreens();
 
 		beamerwidget->showNormal();
-		beamerwidget->move(deskRect[1].x(),deskRect[1].y());
-		beamerwidget->resize(deskRect[1].width(),deskRect[1].height());
+		beamerwidget->move(deskRect[1].x()+100,deskRect[1].y()+100);
+		beamerwidget->resize(deskRect[1].width()-200,deskRect[1].height()-200);
 		beamerwidget->showFullScreen();
 		beamerwidget->calculateAspects();
 
 		showNormal();
-		move(deskRect[0].x(),deskRect[0].y());
-		resize(deskRect[0].width(),deskRect[0].height());
+		move(deskRect[0].x()+100,deskRect[0].y()+100);
+		resize(deskRect[0].width()-200,deskRect[0].height()-200);
 		showFullScreen();
 		calculateAspects();
 
