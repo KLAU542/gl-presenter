@@ -37,8 +37,8 @@ qfontmetrics3(qfont3)
 	qfont3.setPixelSize(deskRect[0].height()/20.0);
 
 	// init font metric
-	qfontmetrics = QFontMetrics(qfont);
-	qfontmetrics3 = QFontMetrics(qfont3);
+	qfontmetrics = QFontMetricsF(qfont);
+	qfontmetrics3 = QFontMetricsF(qfont3);
 
 	overviewfbo = NULL;
 	overviewfboinitialized = false;
@@ -650,8 +650,8 @@ void PresenterWidget::swapScreens() {
 		qfont3.setPixelSize(deskRect[0].height()/20.0);
         	
 		// init font metric
-	        qfontmetrics = QFontMetrics(qfont);
-        	qfontmetrics3 = QFontMetrics(qfont3);
+		qfontmetrics = QFontMetricsF(qfont);
+		qfontmetrics3 = QFontMetricsF(qfont3);
 
 		// reset PDF pages and load in new Beamer size
 		pdfthread->initPages(deskRect[1].width(), deskRect[1].height(), deskRect[0].width(), deskRect[0].height(), animator->getRowCount(), animator->getLineCount());
