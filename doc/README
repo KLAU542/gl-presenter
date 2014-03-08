@@ -51,18 +51,18 @@ Enter, Return, LMB	select slide
 
 
 Build:
-qmake-qt4
+qmake
 make
 
 
 Dependencies:
-qt4/qt5
+Qt >=5.2
 glu
-poppler-qt4/poppler-qt5
+poppler-qt5
 dejavu (font)
 
 Debian build dependencies:
-libqt4-dev/libqt5-dev libqt4-opengl-dev/libqt5opengl5-dev libglu-dev libpoppler-qt4-dev/libpoppler-qt5-dev
+libqt5-dev libqt5opengl5-dev libglu-dev libpoppler-qt5-dev
 
 Windows build dependencies:
 Install Poppler (bin + dev) using the KDE for Windows installer.
