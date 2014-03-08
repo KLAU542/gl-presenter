@@ -36,9 +36,9 @@ qfontmetrics3(qfont3)
 	qfont2.setPixelSize(deskRect[0].height()/40.0);
 	qfont3.setPixelSize(deskRect[0].height()/20.0);
 
-        // init font metric
-        qfontmetrics = QFontMetrics(qfont);
-        qfontmetrics3 = QFontMetrics(qfont3);
+	// init font metric
+	qfontmetrics = QFontMetrics(qfont);
+	qfontmetrics3 = QFontMetrics(qfont3);
 
 	overviewfbo = NULL;
 	overviewfboinitialized = false;

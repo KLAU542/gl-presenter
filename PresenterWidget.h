@@ -36,7 +36,7 @@ private:
         void drawPage(int pagenumber, float xpos = 0.0, float ypos = 0.0, float width=1.0, float height=1.0, bool thumb=false);
 	BeamerWidget *beamerwidget;
         QFont qfont,qfont2,qfont3;
-        QFontMetrics qfontmetrics,qfontmetrics3;
+        QFontMetricsF qfontmetrics,qfontmetrics3;
 	QTimer *timer;
 	QTimer *mousetimer;
 	QString clockstr, timerstr;
