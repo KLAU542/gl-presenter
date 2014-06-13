@@ -104,7 +104,6 @@ void PresenterWidget::initializeGL() {
 		beamerwidget->showFullScreen();
 	}
 	QCursor::setPos(deskRect[0].x() + deskRect[0].width()*0.5, deskRect[0].y() + deskRect[0].height()*0.5);
-	glDisable(GL_DEPTH_TEST);
 	checkForGlError("End of InitializeGL in PresenterWidget ");
         printf("Initialized OpenGL\n");
 }
