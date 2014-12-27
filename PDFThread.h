@@ -28,29 +28,30 @@ public:
 	PDFThread();
 	void run();
 
-        void setAnimator(Animator *animator);
+	void setAnimator(Animator *animator);
 	bool loadFile(QString fn);
 	void initPages(int width, int height, int twidth, int theight, int rowcnt, int linecnt);
+	void initZoom();
 	int getPageCount();
-        void bindPageTexture(int i);
-        void bindThumbTexture(int i);
-        int getWidth(int i);
+	void bindPageTexture(int i);
+	void bindThumbTexture(int i);
+	int getWidth(int i);
 	int getHeight(int i);
 	int getMaxWidth();
 	int getMaxHeight();
-        bool isCached(int i);
+	bool isCached(int i);
 	bool isZoomCached(int i);
 	bool isZoomCached();
-        bool isUpdated(int i);
-        int getThumbnailed();
+	bool isUpdated(int i);
+	int getThumbnailed();
 	CommentLoader *getComments();
-        void quitLoop();
-	
+	void quitLoop();
+
 	bool newthumbs;
 private:
-        QImage getPageImage(int i, int width, int height);
+	QImage getPageImage(int i, int width, int height);
 	void cacheZoom(int i);
-        void renderPages();
+	void renderPages();
 
 	Poppler::Document *doc;
 	Poppler::Page **page;
@@ -63,21 +64,21 @@ private:
 	GLuint *pagetex;
 	int *pagewidth;
 	int *pageheight;
-        bool *updatedthumb;
-        bool *updatedpage;
-        QList<QImage> thumbimage;
-        QList<QImage> pageimage;
+	bool *updatedthumb;
+	bool *updatedpage;
+	QList<QImage> thumbimage;
+	QList<QImage> pageimage;
 
 	QImage zoomimage;
 	int zoomcachepage;
 	GLuint zoomtex;
 	bool updatedzoomcache;
 
-        Animator *animator;
-        QMap<int,int> pagecache;
+	Animator *animator;
+	QMap<int,int> pagecache;
 
 	CommentLoader comments;
 
-        bool quit;
-        int thumbnailed;
+	bool quit;
+	int thumbnailed;
 };

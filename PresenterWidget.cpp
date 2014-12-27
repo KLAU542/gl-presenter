@@ -269,19 +269,7 @@ void PresenterWidget::drawPage(int pagenumber, float xpos, float ypos, float wid
 //	printf("%d %d %d %d\n",width(), height(), pdfthread->getWidth(0), pdfthread->getHeight(0));
 //	printf("%f %f %f %f\n",minx,miny,maxx,maxy);
 
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0,0.0);
-		glVertex2f(minx,miny);
-
-		glTexCoord2f(0.0,1.0);
-		glVertex2f(minx,maxy);
-
-		glTexCoord2f(1.0,1.0);
-		glVertex2f(maxx,maxy);
-
-		glTexCoord2f(1.0,0.0);
-		glVertex2f(maxx,miny);
-	glEnd();
+	paintPage(minx,miny,maxx,maxy);
 	glDisable(GL_TEXTURE_2D);
 }
 

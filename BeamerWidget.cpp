@@ -43,19 +43,19 @@ void BeamerWidget::paintGL() {
 	glViewport(0,0,this->width(),this->height());
 	glClear(GL_COLOR_BUFFER_BIT);
 
-        float animationstate = animator->getAnimation();
-        if (pdfthread->isCached(animator->getCurrentPage())) {
-            if (waitingforcache) {
-                animator->restartAnimation();
-            	animationstate = 0.0;
-                waitingforcache = false;
-            }
-        }
-        else {
-            waitingforcache = true;
-            animationstate = 0.0;
-        }
-	
+	float animationstate = animator->getAnimation();
+	if (pdfthread->isCached(animator->getCurrentPage())) {
+		if (waitingforcache) {
+			animator->restartAnimation();
+			animationstate = 0.0;
+			waitingforcache = false;
+		}
+	}
+	else {
+		waitingforcache = true;
+		animationstate = 0.0;
+	}
+
 	glPushMatrix();
 	if (animator->getMode() == GLP_ZOOM_MODE) {
 		double zoomfactor = animator->getZoomFactor();
@@ -64,7 +64,7 @@ void BeamerWidget::paintGL() {
 		glTranslatef(-animator->getZoomX()*aspectx,-animator->getZoomY()*aspecty,0.0);
 	}
 
-        if (!waitingforcache) {
+	if (!waitingforcache) {
 		bool wasupdated = false;
 		if (animator->isBlended()) {
 			glColor3f(0.0,0.0,0.0);
@@ -75,7 +75,7 @@ void BeamerWidget::paintGL() {
 			maxy = 1.0;
 		}
 		else {
-            		wasupdated = pdfthread->isUpdated(animator->getCurrentPage());
+			wasupdated = pdfthread->isUpdated(animator->getCurrentPage());
 			glEnable(GL_TEXTURE_2D);
 			pdfthread->bindPageTexture(animator->getCurrentPage());
 
@@ -86,29 +86,17 @@ void BeamerWidget::paintGL() {
 		}
 
 
-	//	printf("%d %d %d %d\n",this->width(), this->height(), pdfthread->getWidth(0), pdfthread->getHeight(0));
-	//	printf("%f %f %f %f\n",minx,miny,maxx,maxy);
+		//	printf("%d %d %d %d\n",this->width(), this->height(), pdfthread->getWidth(0), pdfthread->getHeight(0));
+		//	printf("%f %f %f %f\n",minx,miny,maxx,maxy);
 
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0,0.0);
-			glVertex2f(minx,miny);
-
-			glTexCoord2f(0.0,1.0);
-			glVertex2f(minx,maxy);
-
-			glTexCoord2f(1.0,1.0);
-			glVertex2f(maxx,maxy);
-
-			glTexCoord2f(1.0,0.0);
-			glVertex2f(maxx,miny);
-		glEnd();
+		paintPage(minx,miny,maxx,maxy);
 		glColor3f(1.0,1.0,1.0);
 		glDisable(GL_TEXTURE_2D);
-            	if (wasupdated) {
+		if (wasupdated) {
 			printf("wasUpdated\n");
 			glFinish();
-                	animator->restartAnimation();
-	            	animationstate = 0.0;
+			animator->restartAnimation();
+			animationstate = 0.0;
 		}
 	}
 
@@ -131,19 +119,7 @@ void BeamerWidget::paintGL() {
 			maxx = -minx;
 			maxy = -miny;
 		}
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0,0.0);
-			glVertex2f(minx,miny);
-
-			glTexCoord2f(0.0,1.0);
-			glVertex2f(minx,maxy);
-
-			glTexCoord2f(1.0,1.0);
-			glVertex2f(maxx,maxy);
-
-			glTexCoord2f(1.0,0.0);
-			glVertex2f(maxx,miny);
-		glEnd();
+		paintPage(minx,miny,maxx,maxy);
 		
 		// draw dark outside border, for page format changes
 		glDisable(GL_TEXTURE_2D);

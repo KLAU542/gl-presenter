@@ -36,6 +36,22 @@ GeneralWidget::~GeneralWidget()
 {
 }
 
+void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0,0.0);
+		glVertex2f(minx,miny);
+	
+		glTexCoord2f(0.0,1.0);
+		glVertex2f(minx,maxy);
+	
+		glTexCoord2f(1.0,1.0);
+		glVertex2f(maxx,maxy);
+	
+		glTexCoord2f(1.0,0.0);
+		glVertex2f(maxx,miny);
+	glEnd();
+}
+
 void GeneralWidget::checkForGlError(std::string location){
 	GLenum errCode;
 	if ((errCode = glGetError()) != GL_NO_ERROR) {

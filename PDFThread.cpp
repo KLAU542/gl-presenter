@@ -123,6 +123,16 @@ void PDFThread::initPages(int width, int height, int twidth, int theight, int ro
         glGenTextures(1, &zoomtex);
 }
 
+void PDFThread::initZoom() {
+	double zoomfactor = animator->getZoomFactor();
+	double zoomx = animator->getZoomX();
+	double zoomy = animator->getZoomY();
+	// TODO: compute x y w h for poppler renderToImage
+
+	// reset cache
+	zoomcachepage = -1;
+}
+
 int PDFThread::getPageCount() {
 	if (doc == NULL) return 0;
 	return pagecount;
@@ -312,9 +322,9 @@ void PDFThread::renderPages() {
                 replacecache = cit.value();
             }
         }
-	if (replacepage > -1) {
-	        pagecache.remove(replacepage);
-	}
+		if (replacepage > -1) {
+			pagecache.remove(replacepage);
+		}
     }
 
     // load page to cache
