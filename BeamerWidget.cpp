@@ -58,10 +58,10 @@ void BeamerWidget::paintGL() {
 
 	glPushMatrix();
 	if (animator->getMode() == GLP_ZOOM_MODE) {
-		double zoomfactor = animator->getZoomFactor();
-		glScalef(zoomfactor,zoomfactor,zoomfactor);
+//		double zoomfactor = animator->getZoomFactor();
+//		glScalef(zoomfactor,zoomfactor,zoomfactor);
 		calculateAspects();
-		glTranslatef(-animator->getZoomX()*aspectx,-animator->getZoomY()*aspecty,0.0);
+//		glTranslatef(-animator->getZoomX()*aspectx,-animator->getZoomY()*aspecty,0.0);
 	}
 
 	if (!waitingforcache) {
