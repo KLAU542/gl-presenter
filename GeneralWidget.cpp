@@ -56,7 +56,7 @@ void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
 		glPushMatrix();
 		double zoomfactor = animator->getZoomFactor();
 		glScalef(zoomfactor,zoomfactor,zoomfactor);
-		calculateAspects();
+		calculateBeamerAspects();
 		double zx = animator->getZoomX()*aspectx;
 		double zy = animator->getZoomY()*aspecty;
 		glTranslatef(-zx,-zy,0.0);
@@ -208,6 +208,10 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 		case Qt::Key_Return:
 		case Qt::Key_N:
 			animator->nextPage();
+			if (animator->getMode() == GLP_ZOOM_MODE) {
+				calculateBeamerAspects();
+				pdfthread->initZoom(aspectx, aspecty);
+			}
 			handled=true;
 			break;
 		case Qt::Key_Back:
@@ -217,14 +221,26 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 		case Qt::Key_Backspace:
 		case Qt::Key_P:
 			animator->prevPage();
+			if (animator->getMode() == GLP_ZOOM_MODE) {
+				calculateBeamerAspects();
+				pdfthread->initZoom(aspectx, aspecty);
+			}
 			handled=true;
 			break;
 		case Qt::Key_Home:
 			animator->setCurrentPage(0);
+			if (animator->getMode() == GLP_ZOOM_MODE) {
+				calculateBeamerAspects();
+				pdfthread->initZoom(aspectx, aspecty);
+			}
 			handled=true;
 			break;
 		case Qt::Key_End:
 			animator->setCurrentPage(animator->getPageCount()-1);
+			if (animator->getMode() == GLP_ZOOM_MODE) {
+				calculateBeamerAspects();
+				pdfthread->initZoom(aspectx, aspecty);
+			}
 			handled=true;
 			break;
 		case Qt::Key_R:
@@ -261,7 +277,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			}
 			else {
 				animator->setMode(GLP_ZOOM_MODE);
-				calculateAspects();
+				calculateBeamerAspects();
 				pdfthread->initZoom(aspectx, aspecty);
 				
 				// set mouse position
@@ -333,6 +349,10 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 				if (event->key() == Qt::Key_0) bmkey=9;
 				int bmvalue = pdfthread->getComments()->getBookmark(bmkey);
 				animator->setCurrentPage(bmvalue);
+				if (animator->getMode() == GLP_ZOOM_MODE) {
+					calculateBeamerAspects();
+					pdfthread->initZoom(aspectx, aspecty);
+				}
 				if (bmvalue >= 0) {
 					printf("Jump to Bookmark %d -> %d\n", bmkey + 1, bmvalue + 1);
 				}
