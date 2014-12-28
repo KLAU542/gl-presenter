@@ -31,7 +31,7 @@ public:
 	void setAnimator(Animator *animator);
 	bool loadFile(QString fn);
 	void initPages(int width, int height, int twidth, int theight, int rowcnt, int linecnt);
-	void initZoom();
+	void initZoom(double aspectx, double aspecty);
 	int getPageCount();
 	void bindPageTexture(int i);
 	void bindThumbTexture(int i);
@@ -50,6 +50,7 @@ public:
 	bool newthumbs;
 private:
 	QImage getPageImage(int i, int width, int height);
+	QImage getPageImageZoom(int i, int width, int height);
 	void cacheZoom(int i);
 	void renderPages();
 
@@ -73,6 +74,9 @@ private:
 	int zoomcachepage;
 	GLuint zoomtex;
 	bool updatedzoomcache;
+	double zoom_factor;
+	int zoom_x, zoom_y, zoom_w, zoom_h;
+	int zoom_x_cached, zoom_y_cached, zoom_w_cached, zoom_h_cached;
 
 	Animator *animator;
 	QMap<int,int> pagecache;

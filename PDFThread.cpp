@@ -25,19 +25,29 @@
 #endif
 
 PDFThread::PDFThread() {
-        thumbnailed = 0;
+	thumbnailed = 0;
 }
 
 void PDFThread::run()
 {
-        quit = false;
+	quit = false;
 	zoomcachepage = -1;
+	zoom_factor = 1.0;
+	zoom_x = 0;
+	zoom_y = 0;
+	zoom_w = 640;
+	zoom_h = 480;
 
-        // start event loop
-        while (!quit) {
-            renderPages();
-            sleep(0.1); // TODO: wait-condition, wake
-        }
+	zoom_x_cached = -1;
+	zoom_y_cached = -1;
+	zoom_w_cached = -1;
+	zoom_h_cached = -1;
+
+	// start event loop
+	while (!quit) {
+		renderPages();
+		sleep(0.1); // TODO: wait-condition, wake
+	}
 }
 
 void PDFThread::setAnimator(Animator *animator) {
@@ -93,13 +103,25 @@ QImage PDFThread::getPageImage(int i, int width, int height) {
 	return page[i]->renderToImage(72.0 * factor,72.0 * factor);
 }
 
+QImage PDFThread::getPageImageZoom(int i, int width, int height) {
+	double factor1 = width / page[i]->pageSizeF().width();
+	double factor2 = height / page[i]->pageSizeF().height();
+	double factor = (factor1<factor2?factor1:factor2);
+	factor *= zoom_factor;
+	zoom_x_cached = zoom_x;
+	zoom_y_cached = zoom_y;
+	zoom_w_cached = zoom_w;
+	zoom_h_cached = zoom_h;
+	return page[i]->renderToImage(72.0 * factor, 72.0 * factor, zoom_x, zoom_y, zoom_w, zoom_h);
+}
+
 void PDFThread::initPages(int width, int height, int twidth, int theight, int rowcount, int linecount) {
 	// delete cache
-        thumbnailed = 0;
+	thumbnailed = 0;
 	pagecache.clear();
 	for (int i=0; i<pagecount; i++) {
-                updatedthumb[i] = false;
-                updatedpage[i] = false;
+		updatedthumb[i] = false;
+		updatedpage[i] = false;
 	}
 
 	screenwidth = width;
@@ -123,14 +145,19 @@ void PDFThread::initPages(int width, int height, int twidth, int theight, int ro
         glGenTextures(1, &zoomtex);
 }
 
-void PDFThread::initZoom() {
-	double zoomfactor = animator->getZoomFactor();
-	double zoomx = animator->getZoomX();
-	double zoomy = animator->getZoomY();
-	// TODO: compute x y w h for poppler renderToImage
+void PDFThread::initZoom(double aspectx, double aspecty) {
+	zoom_factor = animator->getZoomFactor();
+	zoom_w = screenwidth;
+	zoom_h = screenheight;
+	zoom_x = screenwidth * (animator->getZoomX() + 1.0) * 0.5 * aspectx * zoom_factor - screenwidth * 0.5;
+	zoom_y = -screenheight * (animator->getZoomY() - aspecty) * 0.5 * aspecty *zoom_factor - screenheight * 0.5;
 
 	// reset cache
 	zoomcachepage = -1;
+
+//	printf("initZoom1 %f,%d,%d,%d,%d\n",zoom_factor,zoom_x,zoom_y,zoom_w,zoom_h);
+//	printf("initZoom2 %f,%f,%f,%d,%d\n",animator->getZoomFactor(),animator->getZoomX(),animator->getZoomY(),screenwidth, screenheight);
+//	printf("initZoom3 %f,%f\n",aspectx, aspecty);
 }
 
 int PDFThread::getPageCount() {
@@ -222,7 +249,13 @@ bool PDFThread::isCached(int i) {
 }
 
 bool PDFThread::isZoomCached(int i) {
-	return (i == zoomcachepage);
+	return (
+			i == zoomcachepage &&
+			zoom_x == zoom_x_cached &&
+			zoom_y == zoom_y_cached &&
+			zoom_w == zoom_w_cached &&
+			zoom_h == zoom_h_cached
+			);
 }
 
 bool PDFThread::isZoomCached() {
@@ -244,7 +277,8 @@ CommentLoader *PDFThread::getComments() {
 void PDFThread::cacheZoom(int i) {
 	zoomcachepage = -1;
 
-	zoomimage = getPageImage(i,screenwidth*MAX_ZOOM,screenheight*MAX_ZOOM);
+//	zoomimage = getPageImage(i,screenwidth*MAX_ZOOM,screenheight*MAX_ZOOM);
+	zoomimage = getPageImageZoom(i,screenwidth,screenheight);
 	zoomimage = QGLWidget::convertToGLFormat(zoomimage);
 
 	zoomcachepage = i;

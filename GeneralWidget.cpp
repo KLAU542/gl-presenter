@@ -37,19 +37,76 @@ GeneralWidget::~GeneralWidget()
 }
 
 void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0,0.0);
-		glVertex2f(minx,miny);
-	
-		glTexCoord2f(0.0,1.0);
-		glVertex2f(minx,maxy);
-	
-		glTexCoord2f(1.0,1.0);
-		glVertex2f(maxx,maxy);
-	
-		glTexCoord2f(1.0,0.0);
-		glVertex2f(maxx,miny);
-	glEnd();
+	if (animator->getMode() == GLP_ZOOM_MODE &&
+			pdfthread->isZoomCached(animator->getCurrentPage())) {
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0,0.0);
+			glVertex2f(-1.0,-1.0);
+		
+			glTexCoord2f(0.0,1.0);
+			glVertex2f(-1.0,1.0);
+		
+			glTexCoord2f(1.0,1.0);
+			glVertex2f(1.0,1.0);
+		
+			glTexCoord2f(1.0,0.0);
+			glVertex2f(1.0,-1.0);
+		glEnd();
+
+		glPushMatrix();
+		double zoomfactor = animator->getZoomFactor();
+		glScalef(zoomfactor,zoomfactor,zoomfactor);
+		calculateAspects();
+		double zx = animator->getZoomX()*aspectx;
+		double zy = animator->getZoomY()*aspecty;
+		glTranslatef(-zx,-zy,0.0);
+		
+		// draw dark outside border, for page format changes
+		glDisable(GL_TEXTURE_2D);
+		glColor3f(0.0,0.0,0.0);
+
+		glBegin(GL_QUADS);
+			glVertex2f(-2.0,-2.0);
+			glVertex2f(-2.0, 2.0);
+			glVertex2f(minx, 2.0);
+			glVertex2f(minx,-2.0);
+			
+			glVertex2f(maxx,-2.0);
+			glVertex2f(maxx, 2.0);
+			glVertex2f( 2.0, 2.0);
+			glVertex2f( 2.0,-2.0);
+			
+			glVertex2f(minx,-2.0);
+			glVertex2f(minx,miny);
+			glVertex2f(maxx,miny);
+			glVertex2f(maxx,-2.0);
+
+			glVertex2f(minx,maxy);
+			glVertex2f(minx, 2.0);
+			glVertex2f(maxx, 2.0);
+			glVertex2f(maxx,maxy);
+		glEnd();
+
+		glEnable (GL_TEXTURE_2D);
+		glColor3f(1.0,1.0,1.0);
+		
+		glPopMatrix();
+	}
+	else {
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0,0.0);
+			glVertex2f(minx,miny);
+		
+			glTexCoord2f(0.0,1.0);
+			glVertex2f(minx,maxy);
+		
+			glTexCoord2f(1.0,1.0);
+			glVertex2f(maxx,maxy);
+		
+			glTexCoord2f(1.0,0.0);
+			glVertex2f(maxx,miny);
+		glEnd();
+	}
 }
 
 void GeneralWidget::checkForGlError(std::string location){
@@ -204,6 +261,8 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			}
 			else {
 				animator->setMode(GLP_ZOOM_MODE);
+				calculateAspects();
+				pdfthread->initZoom(aspectx, aspecty);
 				
 				// set mouse position
 //				QRect deskRect = QApplication::desktop()->screenGeometry( 0 );
@@ -228,18 +287,21 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 		case Qt::Key_F:
 			animator->resetZoom();
 			animator->setMode(GLP_ZOOM_MODE);
+			pdfthread->initZoom(aspectx, aspecty);
 			handled = true;
 			break;
 		case Qt::Key_H:
 			calculateBeamerAspects();
 			animator->setZoomX(1.0/aspectx);
 			animator->setMode(GLP_ZOOM_MODE);
+			pdfthread->initZoom(aspectx, aspecty);
 			handled = true;
 			break;
 		case Qt::Key_V:
 			calculateBeamerAspects();
 			animator->setZoomY(1.0/aspecty);
 			animator->setMode(GLP_ZOOM_MODE);
+			pdfthread->initZoom(aspectx, aspecty);
 			handled = true;
 			break;
 		case Qt::Key_M:

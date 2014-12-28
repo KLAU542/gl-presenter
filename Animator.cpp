@@ -235,6 +235,7 @@ void Animator::zoom(double zx, double zy, double zfactor) {
 	verticallock = false;
 	limitzoom();
 	updateWidgets();
+//	printf("Animator::zoom: %f,%f,%f\n",zoomfactor,zoomx,zoomy);
 }
 
 void Animator::move(double zx, double zy) {
@@ -242,6 +243,7 @@ void Animator::move(double zx, double zy) {
 	zoomy -= zy / zoomfactor;
 	limitzoom();
 	updateWidgets();
+//	printf("Animator::move: %f,%f,%f\n",zoomfactor,zoomx,zoomy);
 }
 
 void Animator::setZoom(double zx, double zy, double zfactor) {
@@ -250,6 +252,7 @@ void Animator::setZoom(double zx, double zy, double zfactor) {
 	zoomy = zy;
 	limitzoom();
 	updateWidgets();
+//	printf("Animator::setZoom: %f,%f,%f\n",zoomfactor,zoomx,zoomy);
 }
 
 void Animator::setZoomX(double zfactor) {
