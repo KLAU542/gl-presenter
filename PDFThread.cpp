@@ -149,8 +149,8 @@ void PDFThread::initZoom(double aspectx, double aspecty) {
 	zoom_factor = animator->getZoomFactor();
 	zoom_w = screenwidth;
 	zoom_h = screenheight;
-	zoom_x = screenwidth * (animator->getZoomX() + 1.0) * 0.5 * aspectx * zoom_factor - screenwidth * 0.5;
-	zoom_y = -screenheight * (animator->getZoomY() - 1.0) * 0.5 * aspecty *zoom_factor - screenheight * 0.5;
+	zoom_x = (double)screenwidth * (animator->getZoomX() + 1.0) * 0.5 * aspectx * zoom_factor - (double)screenwidth * 0.5;
+	zoom_y = -(double)screenheight * (animator->getZoomY() - 1.0) * 0.5 * aspecty *zoom_factor - (double)screenheight * 0.5;
 
 	// reset cache
 	zoomcachepage = -1;
