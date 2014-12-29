@@ -39,20 +39,6 @@ GeneralWidget::~GeneralWidget()
 void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
 	if (animator->getMode() == GLP_ZOOM_MODE &&
 			pdfthread->isZoomCached(animator->getCurrentPage())) {
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0,0.0);
-			glVertex2f(-1.0,-1.0);
-		
-			glTexCoord2f(0.0,1.0);
-			glVertex2f(-1.0,1.0);
-		
-			glTexCoord2f(1.0,1.0);
-			glVertex2f(1.0,1.0);
-		
-			glTexCoord2f(1.0,0.0);
-			glVertex2f(1.0,-1.0);
-		glEnd();
-
 		glPushMatrix();
 		double zoomfactor = animator->getZoomFactor();
 		glScalef(zoomfactor,zoomfactor,zoomfactor);
@@ -61,6 +47,21 @@ void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
 		double zy = animator->getZoomY()*aspecty;
 		glTranslatef(-zx,-zy,0.0);
 		
+		// draw zoomed where the screen	is
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0,0.0);
+			glVertex2f(zx-1.0/zoomfactor,zy-1.0/zoomfactor);
+		
+			glTexCoord2f(0.0,1.0);
+			glVertex2f(zx-1.0/zoomfactor,zy+1.0/zoomfactor);
+		
+			glTexCoord2f(1.0,1.0);
+			glVertex2f(zx+1.0/zoomfactor,zy+1.0/zoomfactor);
+		
+			glTexCoord2f(1.0,0.0);
+			glVertex2f(zx+1.0/zoomfactor,zy-1.0/zoomfactor);
+		glEnd();
+
 		// draw dark outside border, for page format changes
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(0.0,0.0,0.0);
