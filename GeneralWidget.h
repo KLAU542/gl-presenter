@@ -29,6 +29,7 @@ public:
 	void calculateAspects();
 protected:
 	void paintPage(float minx, float miny, float maxx, float maxy);
+	void paintOldZoom();
 	void checkForGlError(std::string location);
 	PDFThread *pdfthread;
 	void keyPressEvent(QKeyEvent *event);

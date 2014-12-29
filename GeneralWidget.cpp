@@ -37,31 +37,54 @@ GeneralWidget::~GeneralWidget()
 }
 
 void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
-	if (animator->getMode() == GLP_ZOOM_MODE &&
-			pdfthread->isZoomCached(animator->getCurrentPage())) {
-		glPushMatrix();
+	int pagenumber = animator->getCurrentPage();
+	if (animator->getMode() == GLP_ZOOM_MODE) {
+		if (!pdfthread->isZoomCached(pagenumber)) {
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0,0.0);
+				glVertex2f(minx,miny);
+
+				glTexCoord2f(0.0,1.0);
+				glVertex2f(minx,maxy);
+
+				glTexCoord2f(1.0,1.0);
+				glVertex2f(maxx,maxy);
+
+				glTexCoord2f(1.0,0.0);
+				glVertex2f(maxx,miny);
+			glEnd();
+		}
+
+//		glPushMatrix();
 		double zoomfactor = animator->getZoomFactor();
-		glScalef(zoomfactor,zoomfactor,zoomfactor);
+//		glScalef(zoomfactor,zoomfactor,zoomfactor);
 		calculateBeamerAspects();
 		double zx = animator->getZoomX()*aspectx;
 		double zy = animator->getZoomY()*aspecty;
-		glTranslatef(-zx,-zy,0.0);
-		
-		// draw zoomed where the screen	is
-		glBegin(GL_QUADS);
+//		glTranslatef(-zx,-zy,0.0);
+
+		if (pdfthread->bindOldZoomTexture(pagenumber)) {
+			paintOldZoom();
+			pdfthread->bindPageTexture(pagenumber);
+		}
+
+		if (pdfthread->isZoomCached(pagenumber)) {
+			// draw zoomed where the screen	is
+			glBegin(GL_QUADS);
 			glTexCoord2f(0.0,0.0);
 			glVertex2f(zx-1.0/zoomfactor,zy-1.0/zoomfactor);
-		
+
 			glTexCoord2f(0.0,1.0);
 			glVertex2f(zx-1.0/zoomfactor,zy+1.0/zoomfactor);
-		
+
 			glTexCoord2f(1.0,1.0);
 			glVertex2f(zx+1.0/zoomfactor,zy+1.0/zoomfactor);
-		
+
 			glTexCoord2f(1.0,0.0);
 			glVertex2f(zx+1.0/zoomfactor,zy-1.0/zoomfactor);
-		glEnd();
-
+			glEnd();
+		}
+		
 		// draw dark outside border, for page format changes
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(0.0,0.0,0.0);
@@ -91,7 +114,7 @@ void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
 		glEnable (GL_TEXTURE_2D);
 		glColor3f(1.0,1.0,1.0);
 		
-		glPopMatrix();
+//		glPopMatrix();
 	}
 	else {
 		glBegin(GL_QUADS);
@@ -106,6 +129,31 @@ void GeneralWidget::paintPage(float minx, float miny, float maxx, float maxy) {
 		
 			glTexCoord2f(1.0,0.0);
 			glVertex2f(maxx,miny);
+		glEnd();
+	}
+}
+
+void GeneralWidget::paintOldZoom() {
+	if (animator->getMode() == GLP_ZOOM_MODE &&
+			pdfthread->wasZoomCached(animator->getCurrentPage())) {
+		double zoomfactor = animator->getZoomFactor(true);
+		calculateBeamerAspects();
+		double zx = animator->getZoomX(true)*aspectx;
+		double zy = animator->getZoomY(true)*aspecty;
+		
+		// draw zoomed where the screen	is
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0,0.0);
+			glVertex2f(zx-1.0/zoomfactor,zy-1.0/zoomfactor);
+		
+			glTexCoord2f(0.0,1.0);
+			glVertex2f(zx-1.0/zoomfactor,zy+1.0/zoomfactor);
+		
+			glTexCoord2f(1.0,1.0);
+			glVertex2f(zx+1.0/zoomfactor,zy+1.0/zoomfactor);
+		
+			glTexCoord2f(1.0,0.0);
+			glVertex2f(zx+1.0/zoomfactor,zy-1.0/zoomfactor);
 		glEnd();
 	}
 }

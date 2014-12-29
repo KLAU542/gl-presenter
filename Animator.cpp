@@ -28,9 +28,9 @@ Animator::Animator() {
 	animationtime.start();
 	currentselected = 0;
 
-	zoomx=0.0;
-	zoomy=0.0;
-	zoomfactor=1.0;
+	zoomxold=zoomx=0.0;
+	zoomyold=zoomy=0.0;
+	zoomfactorold=zoomfactor=1.0;
 
 	blended = true;
 	lastblended = true;
@@ -205,15 +205,18 @@ int Animator::getLineCount() {
 	return linecount;
 }
 
-double Animator::getZoomX() {
+double Animator::getZoomX(bool old) {
+	if (old) return zoomxold;
 	return zoomx;
 }
 
-double Animator::getZoomY() {
+double Animator::getZoomY(bool old) {
+	if (old) return zoomyold;
 	return zoomy;
 }
 
-double Animator::getZoomFactor() {
+double Animator::getZoomFactor(bool old) {
+	if (old) return zoomfactorold;
 	return zoomfactor;
 }
 
@@ -274,4 +277,10 @@ void Animator::resetZoom() {
 	horizontallock=false;
 	verticallock = false;
 	updateWidgets();
+}
+
+void Animator::saveOldZoom() {
+	zoomfactorold = zoomfactor;
+	zoomxold = zoomx;
+	zoomyold = zoomy;
 }

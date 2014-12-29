@@ -43,6 +43,8 @@ void PDFThread::run()
 	zoom_w_cached = -1;
 	zoom_h_cached = -1;
 
+	zoom_caching = false;
+
 	// start event loop
 	while (!quit) {
 		renderPages();
@@ -143,6 +145,7 @@ void PDFThread::initPages(int width, int height, int twidth, int theight, int ro
 		glGenTextures(1, pagetex+i);
 	}
 	glGenTextures(1, &zoomtex);
+	glGenTextures(1, &zoomtexold);
 }
 
 void PDFThread::initZoom(double aspectx, double aspecty) {
@@ -153,7 +156,7 @@ void PDFThread::initZoom(double aspectx, double aspecty) {
 	zoom_y = -(double)screenheight * (animator->getZoomY() - 1.0) * 0.5 * aspecty *zoom_factor - (double)screenheight * 0.5;
 
 	// reset cache
-	zoomcachepage = -1;
+//	zoomcachepage = -1;
 
 //	printf("initZoom1 %f,%d,%d,%d,%d\n",zoom_factor,zoom_x,zoom_y,zoom_w,zoom_h);
 //	printf("initZoom2 %f,%f,%f,%d,%d\n",animator->getZoomFactor(),animator->getZoomX(),animator->getZoomY(),screenwidth, screenheight);
@@ -171,10 +174,19 @@ void PDFThread::bindPageTexture(int i) {
     if (animator->getMode() == GLP_ZOOM_MODE && isZoomCached(i)) {
 	    glBindTexture(GL_TEXTURE_2D,zoomtex);
 	    if (updatedzoomcache) {
-                    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-		    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, zoomimage.width(),zoomimage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, zoomimage.bits());
-		    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			// cache old zoom texture
+			glBindTexture(GL_TEXTURE_2D,zoomtexold);
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, zoomimage.width(),zoomimage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, zoomimage.bits());
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			animator->saveOldZoom();
+
+			glBindTexture(GL_TEXTURE_2D,zoomtex);
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, zoomimage.width(),zoomimage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, zoomimage.bits());
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 		    printf("Zoomed page %d: \t%dx%d\n",i+1,zoomimage.width(),zoomimage.height());
 
@@ -199,6 +211,15 @@ void PDFThread::bindPageTexture(int i) {
     else {
         bindThumbTexture(i);
     }
+}
+
+bool PDFThread::bindOldZoomTexture(int i) {
+    // get old zoom texture
+    if (animator->getMode() == GLP_ZOOM_MODE && wasZoomCached(i)) {
+	    glBindTexture(GL_TEXTURE_2D,zoomtexold);
+	    return true;
+ 	}
+	return false;
 }
 
 void PDFThread::bindThumbTexture(int i) {
@@ -248,9 +269,16 @@ bool PDFThread::isCached(int i) {
     return pagecache.contains(i);
 }
 
+bool PDFThread::wasZoomCached(int i) {
+	return (
+			i == zoomcachepage
+			);
+}
+
 bool PDFThread::isZoomCached(int i) {
 	return (
 			i == zoomcachepage &&
+			!zoom_caching &&
 			zoom_x == zoom_x_cached &&
 			zoom_y == zoom_y_cached &&
 			zoom_w == zoom_w_cached &&
@@ -275,13 +303,15 @@ CommentLoader *PDFThread::getComments() {
 }
 
 void PDFThread::cacheZoom(int i) {
-	zoomcachepage = -1;
+//	zoomcachepage = -1;
+	zoom_caching = true;
 
 //	zoomimage = getPageImage(i,screenwidth*MAX_ZOOM,screenheight*MAX_ZOOM);
 	zoomimage = getPageImageZoom(i,screenwidth,screenheight);
 	zoomimage = QGLWidget::convertToGLFormat(zoomimage);
 
 	zoomcachepage = i;
+	zoom_caching = false;
 	updatedzoomcache = true;
 	printf("Loaded Zoom %d: \t%dx%d\n",i+1,zoomimage.width(),zoomimage.height());
 }
@@ -320,8 +350,8 @@ void PDFThread::renderPages() {
     }
 
     if (animator->getMode() == GLP_ZOOM_MODE && !isZoomCached()) { // && animator->getZoomFactor() > 1.000001) {
-	cacheZoom(animator->getCurrentPage());
-	animator->updateWidgets();
+		cacheZoom(animator->getCurrentPage());
+		animator->updateWidgets();
     }
 
     // load thumbnail, if all visible slides are ready

@@ -234,17 +234,17 @@ void PresenterWidget::drawHelp() {
 }
 
 void PresenterWidget::drawPage(int pagenumber, float xpos, float ypos, float width, float height, bool thumb) {
-        if ((!pdfthread->isCached(pagenumber) || thumb) && pdfthread->getThumbnailed()<=pagenumber) {
-            return;
+	if ((!pdfthread->isCached(pagenumber) || thumb) && pdfthread->getThumbnailed()<=pagenumber) {
+		return;
 	}
 	glEnable(GL_TEXTURE_2D);
 	// draw thumb if only thumb available or texture update would break animation
-        if (thumb || (pdfthread->isUpdated(pagenumber) && animator->getAnimation()<1.0 && QApplication::desktop()->numScreens() >= 2)) {
-            pdfthread->bindThumbTexture(pagenumber);
-        }
-        else {
-            pdfthread->bindPageTexture(pagenumber);
-        }
+	if (thumb || (pdfthread->isUpdated(pagenumber) && animator->getAnimation()<1.0 && QApplication::desktop()->numScreens() >= 2)) {
+		pdfthread->bindThumbTexture(pagenumber);
+	}
+	else {
+		pdfthread->bindPageTexture(pagenumber);
+	}
 
 	float factor1 = this->width()*width / pdfthread->getWidth(pagenumber);
 	float factor2 = this->height()*height / pdfthread->getHeight(pagenumber);
@@ -329,21 +329,17 @@ void PresenterWidget::paintZoomMode() {
 	if (animator->isBlended()) {
 		glColor3f(0.25,0.25,0.25);
 	}
-	if (animator->getMode() == GLP_ZOOM_MODE &&
-			pdfthread->isZoomCached(animator->getCurrentPage())) {
-		drawPage(animator->getCurrentPage());
-	}
-	else {
-		glPushMatrix();
-		double zoomfactor = animator->getZoomFactor();
-		glScalef(zoomfactor,zoomfactor,zoomfactor);
-		calculateAspects();
-		double zx = animator->getZoomX()*aspectx;
-		double zy = animator->getZoomY()*aspecty;
-		glTranslatef(-zx,-zy,0.0);
-		drawPage(animator->getCurrentPage());
-		glPopMatrix();
-	}
+
+	glPushMatrix();
+	double zoomfactor = animator->getZoomFactor();
+	glScalef(zoomfactor,zoomfactor,zoomfactor);
+	calculateAspects();
+	double zx = animator->getZoomX()*aspectx;
+	double zy = animator->getZoomY()*aspecty;
+	glTranslatef(-zx,-zy,0.0);
+	drawPage(animator->getCurrentPage());
+	glPopMatrix();
+
 	glColor3f(1.0,1.0,1.0);
 }
 

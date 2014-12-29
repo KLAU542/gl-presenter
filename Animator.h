@@ -54,15 +54,16 @@ public:
 	void setLineCount(int i);
 	int getRowCount();
 	int getLineCount();
-	double getZoomX();
-	double getZoomY();
-	double getZoomFactor();
+	double getZoomX(bool old = false);
+	double getZoomY(bool old = false);
+	double getZoomFactor(bool old = false);
 	void zoom(double zx, double zy, double zfactor);
 	void move(double zx, double zy);
 	void setZoom(double zx, double zy, double zfactor);
 	void setZoomX(double zfactor);
 	void setZoomY(double zfactor);
 	void resetZoom();
+	void saveOldZoom();
 	QTime time;
         void updateWidgets();
         void updatePresenterWidget();
@@ -82,6 +83,7 @@ private:
 	int rowcount;
 	int linecount;
 	double zoomfactor, zoomx, zoomy;
+	double zoomfactorold, zoomxold, zoomyold;
 	bool horizontallock,verticallock;
 	QSettings qsettings;
 };

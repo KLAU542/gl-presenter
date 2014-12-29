@@ -34,12 +34,14 @@ public:
 	void initZoom(double aspectx, double aspecty);
 	int getPageCount();
 	void bindPageTexture(int i);
+	bool bindOldZoomTexture(int i);
 	void bindThumbTexture(int i);
 	int getWidth(int i);
 	int getHeight(int i);
 	int getMaxWidth();
 	int getMaxHeight();
 	bool isCached(int i);
+	bool wasZoomCached(int i);
 	bool isZoomCached(int i);
 	bool isZoomCached();
 	bool isUpdated(int i);
@@ -72,11 +74,12 @@ private:
 
 	QImage zoomimage;
 	int zoomcachepage;
-	GLuint zoomtex;
+	GLuint zoomtex, zoomtexold;
 	bool updatedzoomcache;
 	double zoom_factor;
 	int zoom_x, zoom_y, zoom_w, zoom_h;
 	int zoom_x_cached, zoom_y_cached, zoom_w_cached, zoom_h_cached;
+	bool zoom_caching;
 
 	Animator *animator;
 	QMap<int,int> pagecache;
