@@ -139,10 +139,10 @@ void PDFThread::initPages(int width, int height, int twidth, int theight, int ro
 		pageheight[i]=round(screenfactor*pageheight[i]);
 	}
 
-        for (int i=0; i<CACHE_SIZE; i++) {
-            glGenTextures(1, pagetex+i);
-        }
-        glGenTextures(1, &zoomtex);
+	for (int i=0; i<CACHE_SIZE; i++) {
+		glGenTextures(1, pagetex+i);
+	}
+	glGenTextures(1, &zoomtex);
 }
 
 void PDFThread::initZoom(double aspectx, double aspecty) {
@@ -300,16 +300,16 @@ void PDFThread::renderPages() {
     cachenumbers[7]=animator->getSecondLastPage();
     int ncount = 4;
     int pcount = 3;
-    for (int i=8;i<CACHE_SIZE;i++) {
-    	if ((i%3)==1) {
-            cachenumbers[i]=animator->getXNextPage(-pcount);
-	    pcount++;
+	for (int i=8;i<CACHE_SIZE;i++) {
+		if ((i%3)==1) {
+			cachenumbers[i]=animator->getXNextPage(-pcount);
+			pcount++;
+		}
+		else {
+			cachenumbers[i]=animator->getXNextPage(ncount);
+			ncount++;
+		}
 	}
-        else {
-	    cachenumbers[i]=animator->getXNextPage(ncount);
-	    ncount++;
-	}
-    }
 
     int p = 0;
     while (cachenumbers[p] == -1 || pagecache.contains(cachenumbers[p])) {
@@ -326,16 +326,17 @@ void PDFThread::renderPages() {
 
     // load thumbnail, if all visible slides are ready
     // prefer current, next 2 and previous page over thumbnails
-    if (thumbnailed < pagecount && p >= 7) {
-	int i = thumbnailed;
-	thumbimage[i] = getPageImage(i,thumbwidth,thumbheight);
-	thumbimage[i] = QGLWidget::convertToGLFormat(thumbimage[i]);
-	updatedthumb[i] = true;
-	newthumbs = true;
-	thumbnailed++;
-	animator->updateWidgets();
-	return;
-    }
+	if (thumbnailed < pagecount) { // && p >= 7) {
+		int i = thumbnailed;
+		thumbimage[i] = getPageImage(i,thumbwidth,thumbheight);
+		thumbimage[i] = QGLWidget::convertToGLFormat(thumbimage[i]);
+		updatedthumb[i] = true;
+		newthumbs = true;
+		thumbnailed++;
+//		printf("Loaded Thumbnail %d: \t%dx%d\n",i,thumbimage[i].width(),thumbimage[i].height());
+		animator->updateWidgets();
+		return;
+	}
     
     if (p >= CACHE_SIZE || p >= pagecount) {
 	return;
