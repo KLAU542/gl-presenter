@@ -22,9 +22,7 @@
 PresenterWidget::PresenterWidget(const QGLFormat &format, PDFThread *pdfthread, Animator *animator, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags) : GeneralWidget(format,pdfthread,animator,parent,shareWidget,flags),
 qfont("dejavu"),
 qfont2("dejavu"),
-qfont3("dejavu"),
-qfontmetrics(qfont),
-qfontmetrics3(qfont3)
+qfont3("dejavu")
 {
 	setWindowTitle(tr("Presenter"));
 	setMouseTracking(true);
@@ -32,13 +30,9 @@ qfontmetrics3(qfont3)
 	screen1 = qsettings.value("screens/screen1", 1).toInt();
 	deskRect[0] = QApplication::desktop()->screenGeometry( screen0 );
 
-	qfont.setPixelSize(deskRect[0].height()/13.5);
+	qfont.setPixelSize(deskRect[0].height()/16.9);
 	qfont2.setPixelSize(deskRect[0].height()/40.0);
 	qfont3.setPixelSize(deskRect[0].height()/20.0);
-
-	// init font metric
-	qfontmetrics = QFontMetricsF(qfont);
-	qfontmetrics3 = QFontMetricsF(qfont3);
 
 	overviewfbo = NULL;
 	overviewfboinitialized = false;
@@ -60,6 +54,8 @@ qfontmetrics3(qfont3)
 		beamerwidget->move(deskRect[1].x()+100,deskRect[1].y()+100);
 		beamerwidget->resize(deskRect[1].width(),deskRect[1].height());
 	}
+
+	setAutoFillBackground(false);
 }
 
 PresenterWidget::~PresenterWidget()
@@ -137,8 +133,22 @@ void PresenterWidget::hideMouseCursor() {
 	}
 }
 
-void PresenterWidget::renderCenteredText(QString text, double posx, double posy) {
-        this->renderText(posx - float(qfontmetrics3.width(text))/float(width()), posy - float(qfontmetrics3.xHeight())/float(height()), 0.0, text, qfont3);
+void PresenterWidget::renderPainterText(QPainter *painter, QString text, double posx, double posy, const QFont &font, const QColor &color, int flags) {
+	painter->setFont(font);
+	painter->setPen(color);
+    painter->drawText(posx * width() * 0.5, -posy * height() * 0.5,
+                      width(), height(),
+                      flags, text);
+	
+}
+
+void PresenterWidget::renderCenteredText(QPainter *painter, QString text, double posx, double posy) {
+	painter->setFont(qfont3);
+	painter->setPen(QColor(0.3333*255,0.6667*255,1.0*255));
+    painter->drawText(posx * width() * 0.5, -posy * height() * 0.5,
+                      width(), height(),
+                      Qt::AlignCenter | Qt::TextWordWrap, text);
+	
 }
 
 void PresenterWidget::drawHelp() {
@@ -177,17 +187,6 @@ void PresenterWidget::drawHelp() {
 				glVertex2f( 1.0/3.0,-2.0/3.0);
 				glVertex2f(     1.0,-2.0/3.0);
 			glEnd();
-			renderCenteredText(  QString("previous"),-7.0/9.0,     0.0);
-			renderCenteredText(      QString("zoom"),-3.0/9.0,     0.0);
-			renderCenteredText(      QString("next"), 1.0/9.0,     0.0);
-			renderCenteredText( QString("two pages"), 2.0/3.0, 2.0/3.0);
-			renderCenteredText( QString("selection"), 2.0/3.0,     0.0);
-			if (animator->isBlended()) {
-				renderCenteredText( QString("blend in"), 2.0/3.0,-1.0/2.0);
-			} else {
-				renderCenteredText( QString("blend out"), 2.0/3.0,-1.0/2.0);
-			}
-			renderCenteredText(QString("reset timer"), 2.0/3.0,-5.0/6.0);
 			break;
 		case GLP_ZOOM_MODE:
 			glBegin(GL_LINES);
@@ -202,13 +201,8 @@ void PresenterWidget::drawHelp() {
 				glVertex2f(-7.0/9.0,-1.0 + 2.0/9.0 * float(width()) / float(height()));
 				glVertex2f(    -1.0,-1.0 + 2.0/9.0 * float(width()) / float(height()));
 			glEnd();
-			renderCenteredText( QString("close"), -8.0/9.0, 1.0 - 1.0/9.0 * float(width()) / float(height()));
-			renderCenteredText(  QString("fit"),  -8.0/9.0, -1.0 + 1.0/9.0 * float(width()) / float(height()));
-			renderCenteredText(  QString("zoom"),  8.0/9.0, 0.0);
-			renderCenteredText(QString("scroll"),-1.0/18.0, 0.0);
 			break;
 		case GLP_SELECTION_MODE:
-			renderCenteredText(QString("select page"),0.0, 0.0);
 			break;
 		case GLP_TWOPAGE_MODE:
 			glBegin(GL_LINES);
@@ -223,14 +217,43 @@ void PresenterWidget::drawHelp() {
 				glVertex2f( 1.0/2.0,                                             -1.0);
 				glVertex2f( 1.0/2.0,                                              1.0);
 			glEnd();
-			renderCenteredText(          QString("close"),-8.0/9.0, 1.0 - 1.0/9.0 * float(width()) / float(height()));
-			renderCenteredText(QString("second previous"),-3.0/4.0,                                              0.0);
-			renderCenteredText(       QString("previous"),-1.0/4.0,                                              0.0);
-			renderCenteredText(           QString("next"), 1.0/4.0,                                              0.0);
-			renderCenteredText(    QString("second next"), 3.0/4.0,                                              0.0);
 			break;
 	}
 	glColor4f(1.0,1.0,1.0,1.0);
+}
+
+void PresenterWidget::drawHelpText(QPainter *painter) {
+	switch(animator->getMode()) {
+		case GLP_PRESENTER_MODE:
+			renderCenteredText(    painter, QString("previous"),-7.0/9.0,     0.0);
+			renderCenteredText(    painter, QString("zoom"),-3.0/9.0,     0.0);
+			renderCenteredText(    painter, QString("next"), 1.0/9.0,     0.0);
+			renderCenteredText(    painter, QString("two pages"), 2.0/3.0, 2.0/3.0);
+			renderCenteredText(    painter, QString("selection"), 2.0/3.0,     0.0);
+			if (animator->isBlended()) {
+				renderCenteredText(painter, QString("blend in"), 2.0/3.0,-1.0/2.0);
+			} else {
+				renderCenteredText(painter, QString("blend out"), 2.0/3.0,-1.0/2.0);
+			}
+			renderCenteredText(    painter, QString("reset timer"), 2.0/3.0,-5.0/6.0);
+			break;
+		case GLP_ZOOM_MODE:
+			renderCenteredText(    painter, QString("close"), -8.0/9.0, 1.0 - 1.0/9.0 * float(width()) / float(height()));
+			renderCenteredText(    painter, QString("fit"),  -8.0/9.0, -1.0 + 1.0/9.0 * float(width()) / float(height()));
+			renderCenteredText(    painter, QString("zoom"),  8.0/9.0, 0.0);
+			renderCenteredText(    painter, QString("scroll"),-1.0/18.0, 0.0);
+			break;
+		case GLP_SELECTION_MODE:
+			renderCenteredText(    painter, QString("select page"),0.0, 0.0);
+			break;
+		case GLP_TWOPAGE_MODE:
+			renderCenteredText(    painter, QString("close"),-8.0/9.0, 1.0 - 1.0/9.0 * float(width()) / float(height()));
+			renderCenteredText(    painter, QString("second previous"),-3.0/4.0,                                              0.0);
+			renderCenteredText(    painter, QString("previous"),-1.0/4.0,                                              0.0);
+			renderCenteredText(    painter, QString("next"), 1.0/4.0,                                              0.0);
+			renderCenteredText(    painter, QString("second next"), 3.0/4.0,                                              0.0);
+			break;
+	}
 }
 
 void PresenterWidget::drawPage(int pagenumber, float xpos, float ypos, float width, float height, bool thumb) {
@@ -274,10 +297,10 @@ void PresenterWidget::drawPage(int pagenumber, float xpos, float ypos, float wid
 	glDisable(GL_TEXTURE_2D);
 }
 
-void PresenterWidget::paintComments() {
+void PresenterWidget::paintComments(QPainter *painter) {
 	for (int l=0; l<10; l++) {
 		QString line = pdfthread->getComments()->readNote(animator->getCurrentPage(),l);
-                this->renderText(-0.99, -1.0/3.0 - 1.0/20.0 - float(l)/15.0, 0.0, line, qfont2);
+		renderPainterText(painter, line, -1.0/3.0, -1.0/3.0 - 1.0/20.0 - float(l)/15.0, qfont2, Qt::white, Qt::AlignCenter);
 	}
 }
 
@@ -294,8 +317,6 @@ void PresenterWidget::paintPresenterMode() {
 		drawPage(animator->getSecondNextPage(),0.675,0.005,0.325,0.325);
 	}
 
-	paintComments();
-
 	glColor3f(0.0,0.0,0.0);
 	glBegin(GL_QUADS);
 		glVertex2f(0.33,-1.0);
@@ -308,13 +329,6 @@ void PresenterWidget::paintPresenterMode() {
 	QString positionstr = QString::number(animator->getCurrentPage() + 1);
 	positionstr.append("/");
 	positionstr.append(QString::number(animator->getPageCount()));
-
-//	font->FaceSize(height()/12.0);
-
-        this->renderText(2.0/3.0 - float(qfontmetrics.width(positionstr))/float(width()), -1.0/3.0 - 2.0/11.0, 0.0, positionstr, qfont);
-        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8(" +00:00:00 ")))/float(width()), -1.0/3.0 - 2.0/11.0 - 3.0/12, 0.0, timerstr, qfont);
-	glColor3f(0.5,0.5,0.5);
-        this->renderText(2.0/3.0 - float(qfontmetrics.width(QString::fromUtf8(" ⌚00:00:00 ")))/float(width()), -1.0/3.0 - 2.0/11.0 - 5.0/12, 0.0, clockstr, qfont);
 
 	glColor3f(1.0,1.0,1.0);
 	glBegin(GL_LINES);
@@ -408,7 +422,10 @@ void PresenterWidget::paintSelectionModeUpdate() {
         drawPage(i,xpos,ypos,pagesizex*0.99,pagesizey*0.99,true);
 }
 
-void PresenterWidget::paintGL() {
+//void PresenterWidget::paintGL() {
+void PresenterWidget::paintEvent(QPaintEvent *event) {
+	Q_UNUSED(event);
+	makeCurrent();
 	if (pdfthread->newthumbs) {
 		pdfthread->newthumbs = false;
 		overviewfboinitialized = false;
@@ -443,6 +460,33 @@ void PresenterWidget::paintGL() {
 		drawHelp();
 	}
 	checkForGlError("End of PaintGL in PresenterWidget ");
+
+	QPainter painter(this);
+	switch(animator->getMode()) {
+		case GLP_PRESENTER_MODE:
+			{
+    painter.setRenderHint(QPainter::TextAntialiasing);
+				paintComments(&painter);
+				QString positionstr = QString::number(animator->getCurrentPage() + 1);
+				positionstr.append("/");
+				positionstr.append(QString::number(animator->getPageCount()));
+				renderPainterText(&painter, positionstr, 2.0/3.0, -1.0/3.0 - 2.0/11.0 - 0.0/12.0, qfont, Qt::white,               Qt::AlignCenter);
+				renderPainterText(&painter, timerstr,    2.0/3.0, -1.0/3.0 - 2.0/11.0 - 2.0/12.0, qfont, Qt::white,               Qt::AlignCenter);
+				renderPainterText(&painter, clockstr,    2.0/3.0, -1.0/3.0 - 2.0/11.0 - 4.0/12.0, qfont, QColor(255,255,255,127), Qt::AlignCenter);
+			}
+			break;
+		case GLP_ZOOM_MODE:
+			break;
+		case GLP_SELECTION_MODE:
+			break;
+		case GLP_TWOPAGE_MODE:
+			break;
+	}
+	if (animator->helpoverlay) {
+		drawHelpText(&painter);
+	}
+
+	painter.end();
 }
 
 void PresenterWidget::mousePressEvent(QMouseEvent *event) {
@@ -646,10 +690,6 @@ void PresenterWidget::swapScreens() {
 		qfont2.setPixelSize(deskRect[0].height()/40.0);
 		qfont3.setPixelSize(deskRect[0].height()/20.0);
         	
-		// init font metric
-		qfontmetrics = QFontMetricsF(qfont);
-		qfontmetrics3 = QFontMetricsF(qfont3);
-
 		// reset PDF pages and load in new Beamer size
 		pdfthread->initPages(deskRect[1].width(), deskRect[1].height(), deskRect[0].width(), deskRect[0].height(), animator->getRowCount(), animator->getLineCount());
 		pdfthread->initZoom(aspectx, aspecty);

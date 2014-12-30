@@ -31,23 +31,24 @@ public slots:
 	void hideMouseCursor();
 	void startTimer();
 private:
-	void renderCenteredText(QString text, double posx, double posy);
+	void renderPainterText(QPainter *painter, QString text, double posx, double posy, const QFont &font, const QColor &color, int flags);
+	void renderCenteredText(QPainter *painter, QString text, double posx, double posy);
 	void drawHelp();
-        void drawPage(int pagenumber, float xpos = 0.0, float ypos = 0.0, float width=1.0, float height=1.0, bool thumb=false);
+	void drawHelpText(QPainter *painter);
+	void drawPage(int pagenumber, float xpos = 0.0, float ypos = 0.0, float width=1.0, float height=1.0, bool thumb=false);
 	BeamerWidget *beamerwidget;
-        QFont qfont,qfont2,qfont3;
-        QFontMetricsF qfontmetrics,qfontmetrics3;
+	QFont qfont,qfont2,qfont3;
 	QTimer *timer;
 	QTimer *mousetimer;
 	QString clockstr, timerstr;
 protected:
-	void paintComments();
+	void paintComments(QPainter *painter);
 	void paintPresenterMode();
 	void paintZoomMode();
 	void paintTwoPageMode();
 	void paintSelectionMode();
 	void paintSelectionModeUpdate();
-	void paintGL();
+	void paintEvent(QPaintEvent *event);
 	void initializeGL();
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
