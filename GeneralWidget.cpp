@@ -456,6 +456,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 }
 
 void GeneralWidget::mouseMoveEvent(QMouseEvent *event) {
+	Q_UNUSED(event);
 	int x = QCursor::pos().x();
 	int y = QCursor::pos().y();
 	bool changed = false;
