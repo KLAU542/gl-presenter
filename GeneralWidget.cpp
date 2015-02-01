@@ -259,7 +259,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			animator->nextPage();
 			if (animator->getMode() == GLP_ZOOM_MODE) {
 				calculateBeamerAspects();
-				pdfthread->initZoom(aspectx, aspecty);
+				pdfthread->initZoom(beameraspectx, beameraspecty);
 			}
 			handled=true;
 			break;
@@ -272,7 +272,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			animator->prevPage();
 			if (animator->getMode() == GLP_ZOOM_MODE) {
 				calculateBeamerAspects();
-				pdfthread->initZoom(aspectx, aspecty);
+				pdfthread->initZoom(beameraspectx, beameraspecty);
 			}
 			handled=true;
 			break;
@@ -280,7 +280,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			animator->setCurrentPage(0);
 			if (animator->getMode() == GLP_ZOOM_MODE) {
 				calculateBeamerAspects();
-				pdfthread->initZoom(aspectx, aspecty);
+				pdfthread->initZoom(beameraspectx, beameraspecty);
 			}
 			handled=true;
 			break;
@@ -288,7 +288,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			animator->setCurrentPage(animator->getPageCount()-1);
 			if (animator->getMode() == GLP_ZOOM_MODE) {
 				calculateBeamerAspects();
-				pdfthread->initZoom(aspectx, aspecty);
+				pdfthread->initZoom(beameraspectx, beameraspecty);
 			}
 			handled=true;
 			break;
@@ -327,7 +327,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			else {
 				animator->setMode(GLP_ZOOM_MODE);
 				calculateBeamerAspects();
-				pdfthread->initZoom(aspectx, aspecty);
+				pdfthread->initZoom(beameraspectx, beameraspecty);
 				
 				// set mouse position
 //				QRect deskRect = QApplication::desktop()->screenGeometry( 0 );
@@ -350,23 +350,24 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			handled = true;
 			break;
 		case Qt::Key_F:
+			calculateBeamerAspects();
 			animator->resetZoom();
 			animator->setMode(GLP_ZOOM_MODE);
-			pdfthread->initZoom(aspectx, aspecty);
+			pdfthread->initZoom(beameraspectx, beameraspecty);
 			handled = true;
 			break;
 		case Qt::Key_H:
 			calculateBeamerAspects();
 			animator->setZoomX(1.0/aspectx);
 			animator->setMode(GLP_ZOOM_MODE);
-			pdfthread->initZoom(aspectx, aspecty);
+			pdfthread->initZoom(beameraspectx, beameraspecty);
 			handled = true;
 			break;
 		case Qt::Key_V:
 			calculateBeamerAspects();
 			animator->setZoomY(1.0/aspecty);
 			animator->setMode(GLP_ZOOM_MODE);
-			pdfthread->initZoom(aspectx, aspecty);
+			pdfthread->initZoom(beameraspectx, beameraspecty);
 			handled = true;
 			break;
 		case Qt::Key_M:
@@ -400,7 +401,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 				animator->setCurrentPage(bmvalue);
 				if (animator->getMode() == GLP_ZOOM_MODE) {
 					calculateBeamerAspects();
-					pdfthread->initZoom(aspectx, aspecty);
+					pdfthread->initZoom(beameraspectx, beameraspecty);
 				}
 				if (bmvalue >= 0) {
 					printf("Jump to Bookmark %d -> %d\n", bmkey + 1, bmvalue + 1);
@@ -515,12 +516,12 @@ void GeneralWidget::calculateBeamerAspects() {
 			double (pdfthread->getHeight(animator->getCurrentPage()));
 	double aspectscreen = double(wid->width()) / double(wid->height());
 	if (aspectscreen>aspectpage) {
-		aspectx = aspectpage/aspectscreen;
-		aspecty = 1.0;
+		beameraspectx = aspectpage/aspectscreen;
+		beameraspecty = 1.0;
 	}
 	else {
-		aspecty = aspectscreen/aspectpage;
-		aspectx = 1.0;
+		beameraspecty = aspectscreen/aspectpage;
+		beameraspectx = 1.0;
 	}
 }
 

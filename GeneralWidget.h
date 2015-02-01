@@ -37,6 +37,7 @@ protected:
 	void calculateBeamerAspects();
 	Animator *animator;
 	double aspectx,aspecty;
+	double beameraspectx,beameraspecty;
 	QRect deskRect[2];
 	QSettings qsettings;
 	int screen0,screen1;

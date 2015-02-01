@@ -83,7 +83,8 @@ void PresenterWidget::initializeGL() {
 //	printf("rowcount: %d screenar: %f slidear: %f\n",animator->getRowCount(),float(width())/float(height()),float(pdfthread->getMaxWidth())/float(pdfthread->getMaxHeight()));
 	
 	pdfthread->initPages(deskRect[referencescreen].width(), deskRect[referencescreen].height(), deskRect[0].width(), deskRect[0].height(), animator->getRowCount(), animator->getLineCount());
-	pdfthread->initZoom(aspectx, aspecty);
+	calculateBeamerAspects();
+	pdfthread->initZoom(beameraspectx, beameraspecty);
 
 	overviewfbo = new QGLFramebufferObject(width(),height(),QGLFramebufferObject::NoAttachment,GL_TEXTURE_2D,GL_RGB);
 	
@@ -513,7 +514,8 @@ void PresenterWidget::mousePressEvent(QMouseEvent *event) {
 			else if (x <= 4.0/9.0) {
 				animator->setMode(GLP_ZOOM_MODE);
 				calculateAspects();
-				pdfthread->initZoom(aspectx, aspecty);
+				calculateBeamerAspects();
+				pdfthread->initZoom(beameraspectx, beameraspecty);
 			}
 			else if (x <= 6.0/9.0) {
 				animator->nextPage();
@@ -546,7 +548,8 @@ void PresenterWidget::mousePressEvent(QMouseEvent *event) {
 				}
 				else {
 					animator->resetZoom();
-					pdfthread->initZoom(aspectx, aspecty);
+					calculateBeamerAspects();
+					pdfthread->initZoom(beameraspectx, beameraspecty);
 					zoommode = false;
 					scrollmode = false;
 				}
@@ -631,12 +634,14 @@ void PresenterWidget::mouseMoveEvent(QMouseEvent *event) {
 			if (event->buttons() & Qt::LeftButton) {
 				if (scrollmode) {
 					calculateAspects();
+					calculateBeamerAspects();
 					animator->move(double(event->x()-oldpos.x())/width()/aspectx * 2.0, -double(event->y()-oldpos.y())/height()/aspecty * 2.0);
-					pdfthread->initZoom(aspectx, aspecty);
+					pdfthread->initZoom(beameraspectx, beameraspecty);
 				}
 				else if (zoommode) {
+					calculateBeamerAspects();
 					animator->zoom(0.0, 0.0, -double(event->y()-oldpos.y())/500.0);
-					pdfthread->initZoom(aspectx, aspecty);
+					pdfthread->initZoom(beameraspectx, beameraspecty);
 				}
 				oldpos = event->pos();
 			}
@@ -650,7 +655,8 @@ void PresenterWidget::wheelEvent(QWheelEvent *event) {
 	if (animator->getMode() == GLP_ZOOM_MODE) {
 		calculateAspects();
 		animator->zoom((double(event->x())/width() * 2.0 - 1.0)/aspectx, -(double(event->y())/height() * 2.0 - 1.0)/aspecty, double(event->delta())/1000.0);
-		pdfthread->initZoom(aspectx, aspecty);
+		calculateBeamerAspects();
+		pdfthread->initZoom(beameraspectx, beameraspecty);
 	}
 }
 
@@ -692,7 +698,8 @@ void PresenterWidget::swapScreens() {
         	
 		// reset PDF pages and load in new Beamer size
 		pdfthread->initPages(deskRect[1].width(), deskRect[1].height(), deskRect[0].width(), deskRect[0].height(), animator->getRowCount(), animator->getLineCount());
-		pdfthread->initZoom(aspectx, aspecty);
+		calculateBeamerAspects();
+		pdfthread->initZoom(beameraspectx, beameraspecty);
 		QTimer::singleShot(2000 - QTime::currentTime().msec(), this, SLOT(startTimer()));
 		
 		delete overviewfbo;
