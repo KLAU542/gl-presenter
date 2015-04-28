@@ -53,7 +53,12 @@ QT += opengl
 OTHER_FILES += DejaVuSans.ttf
 
 binary.files = gl-presenter
-binary.path = $$[QT_INSTALL_BINS]
+win32 {
+	binary.path = $$[QT_INSTALL_BINS]
+}
+unix {
+	binary.path = $$[PREFIX]/usr/bin/
+}
 
 INSTALLS += binary
 
