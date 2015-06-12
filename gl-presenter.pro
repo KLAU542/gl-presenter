@@ -35,19 +35,20 @@ unix {
 }
 }
 
-HEADERS += Animator.h \
-    GeneralWidget.h \
-    PresenterWidget.h \
-    BeamerWidget.h \
-    CommentLoader.h \
-    PDFThread.h
-SOURCES += gl-presenter.cpp \
-    Animator.cpp \
-    GeneralWidget.cpp \
-    PresenterWidget.cpp \
-    BeamerWidget.cpp \
-    CommentLoader.cpp \
-    PDFThread.cpp
+INCLUDEPATH += include
+HEADERS += include/Animator.h \
+    include/GeneralWidget.h \
+    include/PresenterWidget.h \
+    include/BeamerWidget.h \
+    include/CommentLoader.h \
+    include/PDFThread.h
+SOURCES += src/gl-presenter.cpp \
+    src/Animator.cpp \
+    src/GeneralWidget.cpp \
+    src/PresenterWidget.cpp \
+    src/BeamerWidget.cpp \
+    src/CommentLoader.cpp \
+    src/PDFThread.cpp
 RESOURCES += gl-presenter.qrc
 QT += opengl
 OTHER_FILES += DejaVuSans.ttf
