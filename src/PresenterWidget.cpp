@@ -113,7 +113,6 @@ void PresenterWidget::startTimer() {
 	if (QApplication::desktop()->numScreens() < 2) {
 		animator->blendOut();
 	}
-	animator->time.start();
 	updateTimes();
 }
 

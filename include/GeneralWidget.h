@@ -41,5 +41,7 @@ protected:
 	QRect deskRect[2];
 	QSettings qsettings;
 	int screen0,screen1;
+private:
+	bool presentationStarted;
 };
 
