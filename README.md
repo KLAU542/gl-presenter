@@ -94,8 +94,8 @@ Notes
 Look at sample file in `doc/notes_sample.pdf.glp`
 Filename must contain the complete PDF filename.
 
-Origin
-------
+Originator
+----------
 
 Copyright (C) 2010 Klaus Denker `<kldenker@unix-ag.uni-kl.de>`
 
