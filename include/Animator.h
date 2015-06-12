@@ -25,6 +25,9 @@
 #define GLP_SELECTION_MODE 2
 #define GLP_TWOPAGE_MODE 3
 
+// The default animation duration in milliseconds (defaults to 400)
+#define GLP_DEFAULT_ANIMATION_DURATION 0
+
 class Animator
 {
 public:

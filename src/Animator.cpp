@@ -24,7 +24,8 @@ Animator::Animator() {
 	lastpage = 0;
 	secondlastpage = 0;
 
-	animationduration = qsettings.value("animator/duration", 400).toInt();
+	animationduration = qsettings.value("animator/duration",
+			GLP_DEFAULT_ANIMATION_DURATION).toInt();
 	animationtime.start();
 	currentselected = 0;
 
