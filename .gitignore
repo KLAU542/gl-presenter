@@ -1,0 +1,11 @@
+# vim swap files
+.sw?
+.*.sw?
+
+# build files
+Makefile
+*.o
+moc_*
+qrc_*
+gl-presenter
+
