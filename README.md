@@ -10,7 +10,7 @@ Usage
 ```
 gl-presenter [OPTION] presentation.pdf
 ```
-Options:
+### Options
 ```
   -a TIME,  --animation-duration=TIME   Set animation duration to TIME milliseconds.
   -c,       --config                    Show configuration dialog.
@@ -18,6 +18,7 @@ Options:
   -h,       --help                      Display this help and exit.
   -l LINES, --comment-lines=LINES       Set number of LINES for comments.
 ```
+*Note, that currently some of these options are not working.*
 
 Features
 --------
