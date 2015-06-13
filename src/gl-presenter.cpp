@@ -49,7 +49,7 @@ QString getCliParameter(QString input, QString patternshort, QString patternlong
 */
 
 void display_usage() {
-	QFile readme(":/doc/README");
+	QFile readme(":/README.md");
 	if (!readme.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 	QTextStream in(&readme);
