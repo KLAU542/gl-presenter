@@ -26,7 +26,7 @@
 #define GLP_TWOPAGE_MODE 3
 
 // The default animation duration in milliseconds (defaults to 400)
-#define GLP_DEFAULT_ANIMATION_DURATION 0
+#define GLP_DEFAULT_ANIMATION_DURATION 400
 
 class Animator
 {
@@ -36,8 +36,8 @@ public:
 	int getCurrentPage();
 	int getNextPage();
 	int getSecondNextPage();
-        int getXNextPage(int x);
-        int getLastPage();
+	int getXNextPage(int x);
+	int getLastPage();
 	int getSecondLastPage();
 	int getPageCount();
 	void setPageCount(int i);
@@ -51,7 +51,7 @@ public:
 	int getSelected();
 	int getMode();
 	void setMode(int mode);
-        void restartAnimation();
+	void restartAnimation();
 	float getAnimation();
 	void setRowCount(int i);
 	void setLineCount(int i);
@@ -67,9 +67,12 @@ public:
 	void setZoomY(double zfactor);
 	void resetZoom();
 	void saveOldZoom();
-	QTime time;
-        void updateWidgets();
-        void updatePresenterWidget();
+
+	void restartTime();
+	int getElapsedTime();
+
+	void updateWidgets();
+	void updatePresenterWidget();
 	bool helpoverlay;
 private:
 	void limitzoom();
@@ -89,5 +92,8 @@ private:
 	double zoomfactorold, zoomxold, zoomyold;
 	bool horizontallock,verticallock;
 	QSettings qsettings;
+
+	QTime time;
+	bool presentationStarted;
 };
 

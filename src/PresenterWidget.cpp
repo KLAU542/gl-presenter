@@ -117,7 +117,7 @@ void PresenterWidget::startTimer() {
 }
 
 void PresenterWidget::updateTimes() {
-	timerstr = QString::fromUtf8(" +").append(QTime((animator->time.elapsed()/3600000)%24,(animator->time.elapsed()/60000)%60,(animator->time.elapsed()/1000)%60,animator->time.elapsed()%1000).toString()).append(QString(" "));
+	timerstr = QString::fromUtf8(" +").append(QTime((animator->getElapsedTime()/3600000)%24,(animator->getElapsedTime()/60000)%60,(animator->getElapsedTime()/1000)%60,animator->getElapsedTime()%1000).toString()).append(QString(" "));
 	clockstr = QString::fromUtf8(" ⌚").append(QTime::currentTime().toString()).append(QString(" "));
 	if (animator->getMode() == GLP_PRESENTER_MODE) {
 		update();
@@ -530,7 +530,7 @@ void PresenterWidget::mousePressEvent(QMouseEvent *event) {
 					animator->blendOut();
 				}
 				else {
-					animator->time.restart();
+					animator->restartTime();
 				}
 			}
 			handled = true;

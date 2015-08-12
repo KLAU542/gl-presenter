@@ -30,8 +30,6 @@ GeneralWidget::GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Anim
 	if (QApplication::desktop()->numScreens() >= 2) {
 		deskRect[1] = QApplication::desktop()->screenGeometry( screen1 );
 	}
-
-	presentationStarted = false;
 }
 
 GeneralWidget::~GeneralWidget()
@@ -258,11 +256,6 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 		case Qt::Key_N:
-			// TODO check also last page was 1 (?)
-			if (!presentationStarted) {
-				presentationStarted = true;
-				animator->time.start();
-			}
 			animator->nextPage();
 			if (animator->getMode() == GLP_ZOOM_MODE) {
 				calculateBeamerAspects();
@@ -300,7 +293,7 @@ void GeneralWidget::keyPressEvent(QKeyEvent *event) {
 			handled=true;
 			break;
 		case Qt::Key_R:
-			animator->time.restart();
+			animator->restartTime();
 			handled=true;
 			break;
 		case Qt::Key_Tab:

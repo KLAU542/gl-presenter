@@ -40,6 +40,8 @@ Animator::Animator() {
 	verticallock = false;
 
 	helpoverlay = false;
+
+	presentationStarted = false;
 }
 
 Animator::~Animator() {
@@ -83,6 +85,12 @@ void Animator::setPageCount(int i) {
 
 void Animator::setCurrentPage(int i) {
     if (i<0 || i>= pagecount) return;
+
+	if (!presentationStarted) {
+		presentationStarted = true;
+		time.start();
+	}
+
     if (animationtime.elapsed()>float(animationduration) || (!lastblended)) {
         lastblended = blended;
 
@@ -284,4 +292,18 @@ void Animator::saveOldZoom() {
 	zoomfactorold = zoomfactor;
 	zoomxold = zoomx;
 	zoomyold = zoomy;
+}
+
+void Animator::restartTime() {
+	if (currentpage == 0)
+		presentationStarted = false;
+	else
+		time.restart();
+}
+
+int Animator::getElapsedTime() {
+	return
+		presentationStarted ?
+		time.elapsed() :
+		0;
 }
