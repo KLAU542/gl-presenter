@@ -23,53 +23,17 @@
 
 using namespace std;
 
-/*
-QString getCliParameter(QString input, QString patternshort, QString patternlong, int &position) {
-	if (input.startsWith(patternshort)) {
-		if (input.length()==patternshort.length()) {
-			position++;
-			if (position >= qApp->arguments().size()-1)
-				return QString();
-			return qApp->arguments()[position];
-		} else {
-			return input.right(input.length()-patternshort.length());
-		}
-	} else if (input.startsWith(patternlong)) {
-		if (input.length()==patternlong.length()) {
-			position++;
-			if (position >= qApp->arguments().size()-1)
-				return QString();
-			return qApp->arguments()[position];
-		} else {
-			return input.right(input.length()-patternlong.length()-1);
-		}
-	}
-	return QString();
-}
-*/
-
-void display_usage() {
-	QFile readme(":/README.md");
-	if (!readme.open(QIODevice::ReadOnly | QIODevice::Text))
-		return;
-	QTextStream in(&readme);
-	QTextStream out(stdout);
-	out << endl;
-	while (!in.atEnd()) {
-		QString line = in.readLine();
-		out << line << endl;
-	}
-}
-
 int main(int argc, char* argv[])
 {
+	QApplication app( argc, argv );
+
 	QCoreApplication::setOrganizationName("gl-presenter");
 	QCoreApplication::setOrganizationDomain("unix-ag.uni-kl.de");
 	QCoreApplication::setApplicationName("gl-presenter");
+	QCoreApplication::setApplicationVersion("0.3.4");
 
 	QSettings qsettings;
 
-	QApplication a( argc, argv );
 	
 	printf("Using Qt version %#x.\n",QT_VERSION);
 
@@ -130,56 +94,60 @@ int main(int argc, char* argv[])
 	PDFThread *pdfthread;
 	Animator *animator;
 
-	/*
-	if (qApp->arguments().size()<=1) {
-		display_usage();
-		return 1;
-	}
-
-	for ( int i = 0; i < qApp->arguments().size(); i++ ) {
-		QString s = qApp->arguments()[i];
-		if (s.startsWith("-h") || s.startsWith("--help")) {
-			display_usage();
-			return 0;
-		}
-		else if (s.startsWith("-c") || s.startsWith("--config")) {
-			printf("Showing configuration dialog.\n");
-			// TODO: start configuration
-			return 0;
-		}
-		else if (s.startsWith("-e") || s.startsWith("--edit")) {
-			printf("Showing editor.\n");
-			// TODO: start editor
-			return 0;
-		}
-		else if (i == qApp->arguments().size()-1) {
-			break;
-		}
-		else if (s.startsWith("-a") || s.startsWith("--animation-duration")) {
-			QString s2 = getCliParameter(s,"-a","--animation-duration",i);
-			printf("Set animation duration to %u milliseconds.\n",s2.toUInt());
-			qsettings.setValue("animator/duration", s2.toUInt());
-		}
-		else if (s.startsWith("-l") || s.startsWith("--comment-lines")) {
-			QString s2 = getCliParameter(s,"-l","--comment-lines",i);
-			printf("Set comment lines to %u.\n",s2.toUInt());
-			// TODO: set comment line count
-		}
-	}
-	*/
-
 #if QT_VERSION >= 0x050000
 	QCommandLineParser parser;
 	parser.setApplicationDescription("GL-Presenter");
+	
+	// TODO: find segfault caused by automatic options
 	parser.addHelpOption();
 	parser.addVersionOption();
 
-	parser.process(a);
+	parser.addPositionalArgument("filename.pdf", "The PDF file to present.");
+		
+	QCommandLineOption configOption(
+			QStringList() << "c" << "config",
+			"Show configuration dialog."
+			);
+	parser.addOption(configOption);
+
+	QCommandLineOption editOption(
+			QStringList() << "e" << "edit",
+			"Show editor."
+			);
+	parser.addOption(editOption);
+
+	QCommandLineOption animationDurationOption(
+			QStringList() << "a" << "animation-duration",
+			"Set animation duration to <duration> milliseconds.",
+			"duration",
+			"400"
+			);
+	parser.addOption(animationDurationOption);
+
+	QCommandLineOption commentLinesOption(
+			QStringList() << "l" << "comment-lines",
+			"Show <count> lines.of comments.",
+			"count",
+			"10"
+			);
+	parser.addOption(commentLinesOption);
+
+	parser.process(app);
 	
 	if (qApp->arguments().size()<=1) {
-		parser.showHelp();
-		return 1;
+		parser.showHelp(1);
 	}
+	
+	// TODO: show configuration dialog
+	//
+	// TODO: show editor
+	
+	unsigned animationDuration = GLP_DEFAULT_ANIMATION_DURATION; 
+	animationDuration = parser.value(animationDurationOption).toUInt();
+	qsettings.setValue("animator/duration", animationDuration);
+	printf("Setting animation duration to %d milliseconds.\n", animationDuration);
+	
+	// TODO: set comment line count
 #endif
 
 	animator = new Animator();
@@ -200,15 +168,15 @@ int main(int argc, char* argv[])
 	pw->showFullScreen();
 	pw->initScreens();
 
-	a.setActiveWindow( pw );
-        int rt = a.exec();
+	app.setActiveWindow( pw );
+	int rt = app.exec();
 
 	delete pw;
 	delete animator;
 
-        pdfthread->quitLoop();
+	pdfthread->quitLoop();
 	pdfthread->wait();
 	delete pdfthread;
-	
+
 	return rt;
 }
