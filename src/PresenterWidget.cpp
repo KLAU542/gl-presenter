@@ -28,6 +28,10 @@ qfont3("dejavu")
 	setMouseTracking(true);
 	screen0 = qsettings.value("screens/screen0", 0).toInt();
 	screen1 = qsettings.value("screens/screen1", 1).toInt();
+	if (QApplication::desktop()->numScreens() <= 1) {
+		screen0 = 0;
+		screen1 = 1;
+	}
 	deskRect[0] = QApplication::desktop()->screenGeometry( screen0 );
 
 	qfont.setPixelSize(deskRect[0].height()/16.9);

@@ -26,6 +26,10 @@ GeneralWidget::GeneralWidget(const QGLFormat &format, PDFThread *pdfthread, Anim
 //	setCursor(Qt::BlankCursor);
 	screen0 = qsettings.value("screens/screen0", 0).toInt();
 	screen1 = qsettings.value("screens/screen1", 1).toInt();
+	if (QApplication::desktop()->numScreens() <= 1) {
+		screen0 = 0;
+		screen1 = 1;
+	}
 	deskRect[0] = QApplication::desktop()->screenGeometry( screen0 );
 	if (QApplication::desktop()->numScreens() >= 2) {
 		deskRect[1] = QApplication::desktop()->screenGeometry( screen1 );

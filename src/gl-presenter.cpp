@@ -162,6 +162,8 @@ int main(int argc, char* argv[])
 
 	pw->showNormal();
 	int screen0 = qsettings.value("screens/screen0", 0).toInt();
+	if (QApplication::desktop()->numScreens() <= 1)
+		screen0 = 0;
 	QRect deskRect = QApplication::desktop()->screenGeometry( screen0 );
 	pw->move(deskRect.x()+100,deskRect.y()+100);
 	pw->resize(deskRect.width(),deskRect.height());
