@@ -77,8 +77,7 @@ Dependencies
 (Though the code is still compatible with Qt 4.)
 
 ### Debian build dependencies
-* Qt5: `libqt5-dev libqt5opengl5-dev libglu-dev libpoppler-qt5-dev`
-* Qt4: `libqt4-dev libqt4-opengl-dev libglu-dev libpoppler-qt4-dev`
+* libqt5-dev libqt5opengl5-dev libglu-dev libpoppler-qt5-dev
 
 ### Windows build dependencies
 Install Poppler (bin + dev) using the KDE for Windows installer.
@@ -92,7 +91,7 @@ for_window [class="Gl_presenter"] floating enable
 
 Notes
 -----
-Look at sample file in `doc/notes_sample.pdf.glp`
+Look at sample file in `samples/notes_sample.pdf.glp`
 Filename must contain the complete PDF filename.
 
 Originator

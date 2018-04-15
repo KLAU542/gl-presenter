@@ -15,7 +15,7 @@
 //  along with GL-Presenter.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-#include <poppler/qt4/poppler-qt4.h>
+#include <poppler/qt5/poppler-qt5.h>
 #include "Animator.h"
 #include "CommentLoader.h"
 #include <QThread>
