@@ -23,7 +23,6 @@ BeamerWidget::BeamerWidget(const QGLFormat &format, PDFThread *pdfthread, Animat
 	initblend=false;
         waitingforcache=false;
 	wasanimated=false;
-	setCursor(Qt::BlankCursor);
 }
 
 BeamerWidget::~BeamerWidget()
